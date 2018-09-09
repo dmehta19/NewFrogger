@@ -1,28 +1,14 @@
 import 'phaser';
+import {level1} from "./level1"; 
+import {CarLine} from "./CarLine"; 
 
 var config = {
-    type: Phaser.AUTO,
+
     parent: 'NewFrogger',
-    width: 800,
-    height: 600,
-    scene: {
-        preload: preload,
-        create: create,
-        update: update
-    }
+    width: 480,
+    height: 480,
+    scene: [level1]
 };
 
+
 var game = new Phaser.Game(config);
-
-function preload ()
-{
-    ContentManager.preload();
-}
-
-function create ()
-{
-}
-
-function update ()
-{
-}
