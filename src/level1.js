@@ -1,13 +1,18 @@
+import {Frog} from "./Character/Frog"; 
+
 export class level1 extends Phaser.Scene{
     constructor (){
         super({key:"level1"});
+        this.frog = new Frog((0,0),this);
     }
+
     preload(){
         try {
             this.load.image('frogger_tiles', '/assets/Environment/Frogger_TileMap.png');
         } catch (error) {
             alert(error.message);
         }
+        this.frog.preload();
     }
 
     create(){
@@ -37,9 +42,13 @@ export class level1 extends Phaser.Scene{
         });
         const tiles = map.addTilesetImage('frogger_tiles');
         const layer = map.createStaticLayer(0, tiles, 0, 0);
+
+        // The player and its settings
+        this.add.sprite(100, 450, 'frog');
     }
 
-    update(){
-
+    update()
+    {
+        
     }
 }
