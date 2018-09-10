@@ -21,8 +21,6 @@ export class level1 extends Phaser.Scene{
     create(){
         const level1 = 
         [
-        [10,10,10,10,10,10,10,10,10,10,10,10,10,10,10],
-        [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
             [10,10,10,10,10,10,10,10,10,10,10,10,10,10,10],
             [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
             [9,9,9,9,9,9,9,9,9,9,9,9,9,9,9],
@@ -50,16 +48,7 @@ export class level1 extends Phaser.Scene{
 
         // The player and its settings
         this.add.sprite(100, 450, 'frog');
-    }
-
-    update()
-    {
-        
-        // public carline1
-
         this.carline1 = new CarLine(14,5,this.baseSpeed,2,'Car_sprite_01',this);
-
-        
     }
 
     update(){
