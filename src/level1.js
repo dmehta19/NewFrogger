@@ -1,14 +1,17 @@
 import {Frog} from "./Character/Frog"; 
+import { CarLine } from "./CarLine";
 
 export class level1 extends Phaser.Scene{
     constructor (){
         super({key:"level1"});
         this.frog = new Frog((0,0),this);
+        this.baseSpeed = 4;
     }
 
     preload(){
         try {
             this.load.image('frogger_tiles', '/assets/Environment/Frogger_TileMap.png');
+            this.load.image('Car_sprite_01','/assets/Imgs/Cars/Car_sprite_01.png');
         } catch (error) {
             alert(error.message);
         }
@@ -20,6 +23,8 @@ export class level1 extends Phaser.Scene{
         [
         [10,10,10,10,10,10,10,10,10,10,10,10,10,10,10],
         [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
+            [10,10,10,10,10,10,10,10,10,10,10,10,10,10,10],
+            [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
             [9,9,9,9,9,9,9,9,9,9,9,9,9,9,9],
             [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
             [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
@@ -50,5 +55,15 @@ export class level1 extends Phaser.Scene{
     update()
     {
         
+        // public carline1
+
+        this.carline1 = new CarLine(14,5,this.baseSpeed,2,'Car_sprite_01',this);
+
+        
+    }
+
+    update(){
+        
+        this.carline1.drawCar();
     }
 }
