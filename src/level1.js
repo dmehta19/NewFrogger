@@ -4,7 +4,7 @@ import { CarLine } from "./CarLine";
 export class level1 extends Phaser.Scene{
     constructor (){
         super({key:"level1"});
-        this.frog = new Frog((0,0),this);
+        this.frog = new Frog(this);
         this.baseSpeed = 4;
     }
 
@@ -47,12 +47,16 @@ export class level1 extends Phaser.Scene{
         const layer = map.createStaticLayer(0, tiles, 0, 0);
 
         // The player and its settings
-        this.add.sprite(100, 450, 'frog');
+        this.frog.create();
         this.carline1 = new CarLine(14,5,this.baseSpeed,2,'Car_sprite_01',this);
+
+        // //  Input Events
+        // this.cursors = this.input.keyboard.createCursorKeys();
     }
 
-    update(){
-        
+    update()
+    {
+        this.frog.update(this.input.keyboard.createCursorKeys());
         this.carline1.drawCar();
     }
 }

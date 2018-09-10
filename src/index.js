@@ -7,6 +7,8 @@ var config = {
     parent: 'NewFrogger',
     width: 480,
     height: 480,
+    pixelart: true,
+    zoom: 5,
     scene: [level1]
 };
 
