@@ -1,20 +1,24 @@
+
 export class Frog
 {
     constructor (_scene){
-        //super({key:"Frog"});
+       // super({key:"Frog"});
         this.PositionX = 100;
         this.PositionY = 450;
         this.Velocity;
         this.scene = _scene;
         this.speed = 1;
         this.sprites;
-        
+
 
     }
 
+
     preload()
     {
+
         this.scene.load.image('frog', '/assets/Character/Frog/Frog_sprite_01.png');
+
         //alert("called");
     } 
 
@@ -44,6 +48,7 @@ export class Frog
             this.PositionY += this.speed;
             this.sprites.y = this.PositionY;
         }
+
     }
     
 }
