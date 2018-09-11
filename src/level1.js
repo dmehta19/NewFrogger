@@ -60,7 +60,7 @@ export class level1 extends Phaser.Scene{
     update()
     {
         //console.log(this.game.input.activePointer.y);
-        this.frog.update(this.input.keyboard.createCursorKeys());
+        this.frog.update();
         this.carline1.drawCar();
     }
 }

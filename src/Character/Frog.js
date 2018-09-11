@@ -1,3 +1,4 @@
+import 'phaser'
 
 export class Frog
 {
@@ -7,10 +8,12 @@ export class Frog
         this.PositionY = 450;
         this.Velocity;
         this.scene = _scene;
-        this.speed = 1;
+        this.MoveDis = 8;
+        this.speedX = 0;
+        this.speedY = 0;
         this.sprites;
-
-
+        this.isMoving;
+        this.TravelDis
     }
 
 
@@ -25,30 +28,51 @@ export class Frog
     create()
     {
         this.sprites = this.scene.add.sprite(this.PositionX,this.PositionY,'frog');
+        this.cursors = this.scene.input.keyboard.addKeys({
+            'UP' : Phaser.Input.Keyboard.KeyCodes.UP,
+            'DOWN' : Phaser.Input.Keyboard.KeyCodes.DOWN,
+            'LEFT' : Phaser.Input.Keyboard.KeyCodes.LEFT,
+            'RIGHT' : Phaser.Input.Keyboard.KeyCodes.RIGHT,
+        })
     }
-    update(cursors)
+    update()
     {
-        if (cursors.left.isDown)
+        
+        if (this.isMoving && (this.TravelDis <= 8))
         {
-            this.PositionX -= this.speed;
-            this.sprites.x = this.PositionX;
+            this.TravelDis += this.speedX;
+            this.sprites.x = this.PositionX + this.TravelDis;
+            this.TravelDis += this.speedY;
+            this.sprites.y = this.PositionY + this.TravelDis;
+            console.log(this.speedX);
         }
-        if (cursors.right.isDown)
+        
+        if (this.TravelDis>=8)
         {
-            this.PositionX += this.speed;
-            this.sprites.x = this.PositionX;
-        }
-        if (cursors.up.isDown)
-        {
-            this.PositionY -= this.speed;
-            this.sprites.y = this.PositionY;
-        }
-        if (cursors.down.isDown)
-        {
-            this.PositionY += this.speed;
-            this.sprites.y = this.PositionY;
+            this.speedX = 0;
+            this.speedY = 0;
+            this.TravelDis = 0;
+            this.isMoving = false;
         }
 
+        if (Phaser.Input.Keyboard.JustDown(this.cursors['LEFT']) && !this.isMoving)
+        {
+            this.speedX = 0;
+            this.isMoving = true;
+        }
+        // if (Phaser.Input.Keyboard.JustDown(this.cursors['RIGHT']))
+        // {
+
+        // }
+        // if (Phaser.Input.Keyboard.JustDown(this.cursors['UP']))
+        // {
+
+        // }
+        // if (Phaser.Input.Keyboard.JustDown(this.cursors['DOWN']))
+        // {
+        //     this.PositionY += this.MoveDis;
+        //     this.sprites.y = this.PositionY;
+        // }
     }
     
 }
