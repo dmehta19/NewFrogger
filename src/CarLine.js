@@ -1,4 +1,4 @@
-
+import 'phaser';
 
 export class CarLine{
     constructor(_line, _amount,_speed, _size,_name,_game){
@@ -15,6 +15,8 @@ export class CarLine{
         this.width = _size*32;
         // string: key of the image
         this.name = _name;
+        // collider of single car
+        this.colliders = [];
 
         // array: the array to store the X position of all car in this line
         this.positions = [];
@@ -23,6 +25,7 @@ export class CarLine{
         // load image
         this.sprites = [];
 
+        // init the interval between cars
         for (var i = 0; i<this.amount; i++){
 
             var interval = (800 / this.amount);
@@ -33,11 +36,22 @@ export class CarLine{
             
         }
 
+        // init the sprites array
         for(var i = 0; i<this.amount; i++){
             this.sprites.push(this.game.add.sprite(this.positions[i] + this.width/2,32*this.row-16,this.name));
         }
+        // flip horizontally if the moving direction is negative
+        for(var i = 0; i<this.amount; i++){
+            if(this.dir == -1){
+                this.sprites[i].flipX = true;
+            }
+        }
        
-
+        // init the collider
+        for(var i = 0; i<this.amount; i++)
+        {
+            this.colliders.push(new Phaser.Geom.Rectangle(this.positions[i],this.row*32-16,this.size*32,32));
+        }
 
     }
 
@@ -50,7 +64,7 @@ export class CarLine{
             }
 
             if(this.positions[i]<0 && this.dir<0){
-                this.positions[i] = 0;
+                this.positions[i] = 800;
             }
 
             this.sprites[i].x = this.positions[i];
