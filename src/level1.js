@@ -60,21 +60,27 @@ export class level1 extends Phaser.Scene{
 
         // The player and its settings
 
-        this.frog.create();
+        
 
 
         this.carLines = [
+            new CarLine(2,2,this.baseSpeed+3,2,'Car_sprite_01',this),
             new CarLine(10,5,this.baseSpeed+1,2,'Car_sprite_01',this),
             new CarLine(11,4,this.baseSpeed,2,'Car_sprite_01',this),
             new CarLine(13,2,this.baseSpeed-2,2,'Car_sprite_01',this),
             new CarLine(14,3,this.baseSpeed-1,2,'Car_sprite_01',this)
             
+            
         ];
 
         this.logLines = [
-            new LogLines(4,1,2,[4,4],['log_end','log_middle'],this)
+            new LogLines(4,3,2,[2,5],['log_end','log_middle'],this),
+            new LogLines(5,2,1,[2,4],['log_end','log_middle'],this),
+            new LogLines(7,2,3,[3,5],['log_end','log_middle'],this),
+            new LogLines(8,4,2,[2,2],['log_end','log_middle'],this)
         ];
 
+        this.frog.create();
         // //  Input Events
         // this.cursors = this.input.keyboard.createCursorKeys();
     }
@@ -87,6 +93,10 @@ export class level1 extends Phaser.Scene{
             this.carLines.forEach(function(element) {
                 element.drawCar();
               });
+
+            this.logLines.forEach(element => {
+                element.drawLogLines();
+            });
     
     /*// Following lines are useful! please do not delete them!
 

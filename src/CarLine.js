@@ -17,6 +17,8 @@ export class CarLine{
         this.name = _name;
         // collider of single car
         this.colliders = [];
+        // array of int:boundary
+        this.boundary = [-100,500]
 
         // array: the array to store the X position of all car in this line
         this.positions = [];
@@ -59,12 +61,12 @@ export class CarLine{
         // update position
         for(var i = 0; i<this.amount;i++){
             this.positions[i] += this.dir*this.speed;
-            if(this.positions[i] > 800 && this.dir>0){
-                this.positions[i] = 0;
+            if(this.positions[i] > this.boundary[1] && this.dir>0){
+                this.positions[i] = this.boundary[0];
             }
 
-            if(this.positions[i]<0 && this.dir<0){
-                this.positions[i] = 800;
+            if(this.positions[i]<this.boundary[0] && this.dir<0){
+                this.positions[i] = this.boundary[1];
             }
 
             this.sprites[i].x = this.positions[i];
