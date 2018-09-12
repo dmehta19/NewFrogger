@@ -12,7 +12,8 @@ export class CarLine{
         // int: Set positive direction as right, if the line id is even, go right, else go left
         this.dir = (this.row%2==0)?1:-1;
         // int: width of each car
-        this.width = _size*32;
+        this.width = _size*24;
+        this.height = 20;
         // string: key of the image
         this.name = _name;
         // collider of single car
@@ -52,26 +53,26 @@ export class CarLine{
         // init the collider
         for(var i = 0; i<this.amount; i++)
         {
-            this.colliders.push(new Phaser.Geom.Rectangle(this.positions[i],this.row*32-16,this.width,32));
+            this.colliders.push(new Phaser.Geom.Rectangle(this.positions[i]+16,this.row*32-32+16,this.width,this.height));
         }
+
 
     }
 
     drawCar(){
         // update position
         for(var i = 0; i<this.amount;i++){
-            this.positions[i] += this.dir*this.speed;
-            if(this.positions[i] > this.boundary[1] && this.dir>0){
-                this.positions[i] = this.boundary[0];
+            this.sprites[i].x += this.dir*this.speed;
+            if(this.sprites[i].x > this.boundary[1] && this.dir>0){
+                this.sprites[i].x = this.boundary[0];
             }
 
-            if(this.positions[i]<this.boundary[0] && this.dir<0){
-                this.positions[i] = this.boundary[1];
+            if(this.sprites[i].x<this.boundary[0] && this.dir<0){
+                this.sprites[i].x = this.boundary[1];
             }
 
-            this.sprites[i].x = this.positions[i];
-            this.colliders[i].x = this.positions[i];
-            this.colliders[i].y = this.sprites[i].y;
+            this.colliders[i].x = this.sprites[i].x-this.width/2+16;
+            this.colliders[i].y = this.sprites[i].y-this.height/2+16;
             
         }
 

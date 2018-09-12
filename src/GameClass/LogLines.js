@@ -14,12 +14,13 @@ export class LogLines{
         this.LogsSprites = [];
         // positions
         this.positions = [];
+        // collider array
+        this.colliders = [];
 
         // init logs sprite
         for(var i = 0;i < this.amount;i++){
             var temp = new TheLog(Math.floor(Math.random()*(ia_minAndMax[1] - ia_minAndMax[0])) + ia_minAndMax[0],sa_names[0],sa_names[1],_game);
             this.LogsSprites.push(temp);
-            
         }
         // init the position of logs
         var prevX = 0;
@@ -33,7 +34,18 @@ export class LogLines{
             }
             this.positions.push(this.LogsSprites[i].logSprites[0].x);
         }
-        
+
+        // init the collider of logs
+        for(var i = 0; i< this.amount;i++)
+        {
+            this.colliders.push(
+                new Phaser.Geom.Rectangle(this.positions[i]-16+16,
+                    this.line*32 - 32+16,
+                    this.LogsSprites[i].length*32,
+                    32));
+            
+        }
+    
     }
 
     drawLogLines(){
@@ -47,6 +59,9 @@ export class LogLines{
                     if(this.positions[i]<this.boundary[0] && this.dir<0){
                         this.positions[i] = this.boundary[1];
                     }
+
+                    this.colliders[i] = new Phaser.Geom.Rectangle(this.positions[i]-16+16,this.line*32 - 32+16,this.LogsSprites[i].length*32,32);
+
                     // assign position
                     for(var j=0;j<this.LogsSprites[i].length;j++){
                         this.LogsSprites[i].logSprites[j].x =this.positions[i]+ j*32;

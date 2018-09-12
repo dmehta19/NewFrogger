@@ -13,8 +13,10 @@ export class level1 extends Phaser.Scene{
         this.timer;
         this.endTimer;
 
-        this.baseSpeed = 4;
-        this.paused;
+        this.baseSpeed = 2;
+        this.paused = false;
+        
+        this.isGameOver = false;
     }
     preload(){
         this.frog = new Frog(this);
@@ -39,7 +41,6 @@ export class level1 extends Phaser.Scene{
     }
 
     create(){
-        this.graphics = this.add.graphics({ fillStyle: { color: 0x0000ff } });
 
         const level1 = 
         [
@@ -57,7 +58,7 @@ export class level1 extends Phaser.Scene{
             [8,8,8,8,8,8,8,8,8,8,8,8,8,8,8],
             [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
             [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
-            [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+            [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
         ];
     
         const map = this.make.tilemap({
@@ -75,20 +76,20 @@ export class level1 extends Phaser.Scene{
 
 
         this.carLines = [
-            new CarLine(2,2,this.baseSpeed+3,2,'Car_sprite_01',this),
-            new CarLine(10,5,this.baseSpeed+1,2,'Car_sprite_01',this),
-            new CarLine(11,4,this.baseSpeed,2,'Car_sprite_01',this),
-            new CarLine(13,2,this.baseSpeed-2,2,'Car_sprite_01',this),
-            new CarLine(14,3,this.baseSpeed-1,2,'Car_sprite_01',this)
+            new CarLine(2,2,this.baseSpeed+1,1,'Car_sprite_01',this),
+            new CarLine(10,3,this.baseSpeed+1,1,'Car_sprite_01',this),
+            new CarLine(11,4,this.baseSpeed,1,'Car_sprite_01',this),
+            new CarLine(13,2,this.baseSpeed-1,1,'Car_sprite_01',this),
+            new CarLine(14,3,this.baseSpeed-1,1,'Car_sprite_01',this)
             
             
         ];
 
         this.logLines = [
-            new LogLines(4,3,2,[2,5],['log_end','log_middle'],this),
-            new LogLines(5,2,1,[2,4],['log_end','log_middle'],this),
-            new LogLines(7,2,3,[3,5],['log_end','log_middle'],this),
-            new LogLines(8,4,2,[2,2],['log_end','log_middle'],this)
+            new LogLines(4,3,this.baseSpeed,[2,5],['log_end','log_middle'],this),
+            new LogLines(5,2,this.baseSpeed-1,[2,4],['log_end','log_middle'],this),
+            new LogLines(7,2,this.baseSpeed+1,[3,5],['log_end','log_middle'],this),
+            new LogLines(8,4,this.baseSpeed,[2,2],['log_end','log_middle'],this)
         ];
 
         //creating Timer objects
@@ -97,7 +98,7 @@ export class level1 extends Phaser.Scene{
         //timer event set for 100 secs
         this.timer = this.time.addEvent({delay : 100000 , callback: this.printLoseScreen, callbackScope: this });
 
-        this.frog.create();
+        this.frog.create(level1);
         // //  Input Events
         // this.cursors = this.input.keyboard.createCursorKeys();
     }
@@ -109,12 +110,59 @@ export class level1 extends Phaser.Scene{
         
         if(!this.paused)
         {
-             this.frog.update(this.input.keyboard.createCursorKeys());
-            this.carline1.drawCar();
+            this.frog.update(this.input.keyboard.createCursorKeys());
+        
             if (Phaser.Geom.Intersects.RectangleToRectangle(this.frog.getBounds(), this.Goal.getBounds())) 
             {
                 this.time.addEvent({delay : 1000 , callback: this.printWinScreen, callbackScope: this });
             }
+
+            // drawing carlines
+            this.carLines.forEach(function(element) {
+                element.drawCar();
+              });
+
+              // draw logs
+            this.logLines.forEach(element => {
+                element.drawLogLines();
+            });
+
+             // collision with car
+              for(var i=0;i<this.carLines.length;i++){
+                  for(var j=0;j<this.carLines[i].amount;j++){
+                    if(!this.frog.isDie && Collision.ACollideB(this.frog.collider, this.carLines[i].colliders[j])){
+                        //console.log("collide with: " + "line" + i.toString() + " collider: " + j.toString());
+                        console.log(this.carLines[i].colliders[j]);
+                        console.log(this.frog.collider);
+                        this.frog.die();
+                        this.paused = true;
+                        this.printLoseScreen();
+                    }
+                  }
+              }
+              this.frog.moveAlongLog(0);
+              this.frog.onlog = false;
+              // collision with logs
+              for(var i=0;i<this.logLines.length;i++){
+                
+                for(var j=0;j<this.logLines[i].amount;j++){
+                  if(Collision.AContainsB(this.logLines[i].colliders[j], this.frog.collider)){
+                    var spd= this.logLines[i].speed * this.logLines[i].dir;
+                   // console.log(spd);
+                    this.frog.moveAlongLog(spd);
+                    this.frog.onlog = true;
+                  }
+                }
+                
+            }
+
+            // if in water(tile id = 3), die
+            if(this.frog.inArea[0] == 3 && !this.frog.onlog && this.frog.isMoveDone){
+                this.frog.die();
+                this.paused = true;
+                this.printLoseScreen();
+            }
+
         }
     }
     restartGame(){
@@ -133,48 +181,11 @@ export class level1 extends Phaser.Scene{
         this.paused = true;
     }
     printLoseScreen(){
-       
-        
         this.ScreenText = this.add.text(210,230,'You Lose',this);
         this.time.addEvent({delay : 4000 , callback: this.restartGame, callbackScope: this });
-    
-    
-    this.paused = true;
-=======
-        if(!this.isGameOver){
-
+        this.paused = true;
             
-            this.frog.update(this.input.keyboard.createCursorKeys());
 
-            // drawing carlines
-            this.carLines.forEach(function(element) {
-                element.drawCar();
-              });
-
-            this.logLines.forEach(element => {
-                element.drawLogLines();
-            });
-
-            // checke car collisison with fog
-              this.carLines.forEach(function(cars) {
-                cars.colliders.forEach(car => {
-                    
-                }); 
-              });
-             // console.log(this.carLines[4].colliders[0]);
-              //console.log("frog" + this.frog.collider.x);
-
-              
-              
-              for(var i=0;i<this.carLines.length;i++){
-                
-                  for(var j=0;j<this.carLines[i].amount;j++){
-                    if(!this.frog.isDie && Collision.ACollideB(this.frog.collider, this.carLines[i].colliders[j])){
-                        console.log("collide with: " + "line" + i.toString() + " collider: " + j.toString());
-                        this.frog.die();
-                    }
-                  }
-              }
 
          /*   // checke log collisison with fog
             frog.isOnLog = false;
@@ -186,11 +197,8 @@ export class level1 extends Phaser.Scene{
                 }); 
             });
             */
-        }
+  
        
->>>>>>> LogLinesMovement
     }
-
-
 
 }
