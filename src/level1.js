@@ -71,8 +71,8 @@ export class level1 extends Phaser.Scene{
         this.TimerText = this.add.text(0,0,'Time : 100',this);
         this.TimerValue = 100;
         //timer event set for 100 secs
-        //this.timer = this.time.addEvent({delay : 100000 , callback: this.printLoseScreen, callbackScope: this });
-        //this.physics.add.overlap(this.frog.sprites, this.carline1.sprites, this.printOverlap, null, this);
+        this.timer = this.time.addEvent({delay : 100000 , callback: this.printLoseScreen, callbackScope: this });
+        this.physics.add.overlap(this.frog.sprites, this.carline1.sprites, this.printOverlap, null, this);
         this.physics.add.overlap(this.frog.sprites, this.hazards, this.printOverlap, null, this);
         // //  Input Events
         // this.cursors = this.input.keyboard.createCursorKeys();
