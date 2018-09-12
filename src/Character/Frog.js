@@ -1,33 +1,41 @@
 import 'phaser'
 
+/*
+    The Frog Class for all the logic about Frog
+*/
+
 export class Frog
 {
     constructor (_scene){
        // super({key:"Frog"});
-        this.PositionX = 100;
-        this.PositionY = 450;
-        this.Velocity;
-        this.scene = _scene;
-        this.MoveDis = 8;
-        this.speedX = 0;
-        this.speedY = 0;
-        this.sprites;
-        this.isMoving;
-        this.TravelDis
+        this.PositionX = 128;  // Start PositionX
+        this.PositionY = 464;  // Start PositionY
+        this.scene = _scene;   // Level scene from LEVEL class
+        this.MoveDis = 16;     // Each Step moving Distance
+        this.MaxSpeed = 2;     // Max speed for moving speed
+        this.speedX = 0;       // Speed for X
+        this.speedY = 0;       // Speed for Y
+        this.sprites;          // Frog sprites from LEVEL class
+        this.isMoving;         // Check if it's moving
+        this.TravelDis;
+        this.isDie = false;        // Traveled Distance for count.
     }
 
 
     preload()
     {
-
+        // preload the frog assets.
         this.scene.load.image('frog', '/assets/Character/Frog/Frog_sprite_01.png');
 
-        //alert("called");
     } 
 
     create()
     {
-        this.sprites = this.scene.add.sprite(this.PositionX,this.PositionY,'frog');
+        // Render the frog to the screen
+        if (!this.isDie)
+        {this.sprites = this.scene.add.sprite(this.PositionX,this.PositionY,'frog');}
+
+        // Create the control keys dict
         this.cursors = this.scene.input.keyboard.addKeys({
             'UP' : Phaser.Input.Keyboard.KeyCodes.UP,
             'DOWN' : Phaser.Input.Keyboard.KeyCodes.DOWN,
@@ -37,42 +45,60 @@ export class Frog
     }
     update()
     {
-        
-        if (this.isMoving && (this.TravelDis <= 8))
+        // To Check if it's moving.
+        if (!this.isDie)
         {
-            this.TravelDis += this.speedX;
-            this.sprites.x = this.PositionX + this.TravelDis;
-            this.TravelDis += this.speedY;
-            this.sprites.y = this.PositionY + this.TravelDis;
-            console.log(this.speedX);
-        }
-        
-        if (this.TravelDis>=8)
-        {
-            this.speedX = 0;
-            this.speedY = 0;
-            this.TravelDis = 0;
-            this.isMoving = false;
-        }
+            if (this.isMoving && Math.abs(this.TravelDis)<this.MoveDis)
+            {
+                // Update the sprites position
+                this.TravelDis += this.speedX;
+                this.sprites.x += this.speedX;
+                this.TravelDis += this.speedY;
+                this.sprites.y += this.speedY;
+                //console.log(this.TravelDis);
+                if (this.sprites.x < 16) { this.sprites.x  = 16; this.speedX = 0; this.TravelDis = 0; this.isMoving = false;} // Block the frog move out from the screen. // TODO remove the Magic Numb   // WARNING Magic Number 16
+                else if (this.sprites.x > 464) { this.sprites.x  = 464; this.speedX = 0; this.TravelDis = 0; this.isMoving = false;} 
+                else if (this.sprites.y < 16) { this.sprites.y  = 16; this.speedY = 0; this.TravelDis = 0; this.isMoving = false;} 
+                else if (this.sprites.y > 464) { this.sprites.y  = 464; this.speedY = 0; this.TravelDis = 0; this.isMoving = false;} 
+            }
+            else
+            {
+                // Stop the frog
+                this.speedX = 0;
+                this.speedY = 0;
+                this.TravelDis = 0;
+                this.isMoving = false;
+            }
 
-        if (Phaser.Input.Keyboard.JustDown(this.cursors['LEFT']) && !this.isMoving)
-        {
-            this.speedX = 0;
-            this.isMoving = true;
+
+            // Bind the keyboard input to increasing speed.
+            if (Phaser.Input.Keyboard.JustDown(this.cursors['LEFT']) && !this.isMoving)
+            {
+                this.speedX = -this.MaxSpeed;
+                this.isMoving = true;
+            }
+            if (Phaser.Input.Keyboard.JustDown(this.cursors['RIGHT'])&& !this.isMoving)
+            {
+                this.speedX = this.MaxSpeed;
+                this.isMoving = true;
+            }
+            if (Phaser.Input.Keyboard.JustDown(this.cursors['UP'])&& !this.isMoving)
+            {
+                this.speedY = -this.MaxSpeed;
+                this.isMoving = true;
+            }
+            if (Phaser.Input.Keyboard.JustDown(this.cursors['DOWN'])&& !this.isMoving)
+            {
+                this.speedY = this.MaxSpeed;
+                this.isMoving = true;
+            }
         }
-        // if (Phaser.Input.Keyboard.JustDown(this.cursors['RIGHT']))
-        // {
+    }
 
-        // }
-        // if (Phaser.Input.Keyboard.JustDown(this.cursors['UP']))
-        // {
-
-        // }
-        // if (Phaser.Input.Keyboard.JustDown(this.cursors['DOWN']))
-        // {
-        //     this.PositionY += this.MoveDis;
-        //     this.sprites.y = this.PositionY;
-        // }
+    die()
+    {
+        if (!this.isDie)
+        this.isDie = true;
     }
     
 }
