@@ -1,6 +1,6 @@
 import 'phaser';
 import {level1} from "./level1"; 
-import {CarLine} from "./CarLine"; 
+
 
 var config = {
 
