@@ -19,7 +19,7 @@ export class LogLines{
         for(var i = 0;i < this.amount;i++){
             var temp = new TheLog(Math.floor(Math.random()*(ia_minAndMax[1] - ia_minAndMax[0])) + ia_minAndMax[0],sa_names[0],sa_names[1],_game);
             this.LogsSprites.push(temp);
-            console.log(temp.length);
+            
         }
         // init the position of logs
         var prevX = 0;

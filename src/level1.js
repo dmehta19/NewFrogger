@@ -4,15 +4,16 @@ import { Collision } from "./Engine/Collision";
 import { LogLines } from "./GameClass/LogLines";
 
 export class level1 extends Phaser.Scene{
+    
     constructor (){
         super({key:"level1"});
         this.frog = new Frog(this);
 
         this.baseSpeed = 4;
-
-        this.isGameOver = false;
+        
+        level1.isGameOver = false;
+        
     }
-
     preload(){
         try {
             // environments
@@ -30,6 +31,8 @@ export class level1 extends Phaser.Scene{
     }
 
     create(){
+        this.graphics = this.add.graphics({ fillStyle: { color: 0x0000ff } });
+
         const level1 = 
         [
             [10,10,10,10,10,10,10,10,10,10,10,10,10,10,10],
@@ -88,7 +91,10 @@ export class level1 extends Phaser.Scene{
     update()
     {
         if(!this.isGameOver){
+
+            
             this.frog.update(this.input.keyboard.createCursorKeys());
+
             // drawing carlines
             this.carLines.forEach(function(element) {
                 element.drawCar();
@@ -97,19 +103,29 @@ export class level1 extends Phaser.Scene{
             this.logLines.forEach(element => {
                 element.drawLogLines();
             });
-    
-    /*// Following lines are useful! please do not delete them!
 
             // checke car collisison with fog
               this.carLines.forEach(function(cars) {
                 cars.colliders.forEach(car => {
-                    if(Collision.ACollideB(frog.collider,car)){
-                        frog.Die();
-                        break;
-                    }
+                    
                 }); 
               });
-            // checke log collisison with fog
+             // console.log(this.carLines[4].colliders[0]);
+              //console.log("frog" + this.frog.collider.x);
+
+              
+              
+              for(var i=0;i<this.carLines.length;i++){
+                
+                  for(var j=0;j<this.carLines[i].amount;j++){
+                    if(!this.frog.isDie && Collision.ACollideB(this.frog.collider, this.carLines[i].colliders[j])){
+                        console.log("collide with: " + "line" + i.toString() + " collider: " + j.toString());
+                        this.frog.die();
+                    }
+                  }
+              }
+
+         /*   // checke log collisison with fog
             frog.isOnLog = false;
             this.logLines.forEach(function(logs) {
                 logs.colliders.forEach(log => {
@@ -122,5 +138,7 @@ export class level1 extends Phaser.Scene{
         }
        
     }
+
+
 
 }

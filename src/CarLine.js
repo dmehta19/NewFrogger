@@ -52,7 +52,7 @@ export class CarLine{
         // init the collider
         for(var i = 0; i<this.amount; i++)
         {
-            this.colliders.push(new Phaser.Geom.Rectangle(this.positions[i],this.row*32-16,this.size*32,32));
+            this.colliders.push(new Phaser.Geom.Rectangle(this.positions[i],this.row*32-16,this.width,32));
         }
 
     }
@@ -70,6 +70,9 @@ export class CarLine{
             }
 
             this.sprites[i].x = this.positions[i];
+            this.colliders[i].x = this.positions[i];
+            this.colliders[i].y = this.sprites[i].y;
+            
         }
 
     }
