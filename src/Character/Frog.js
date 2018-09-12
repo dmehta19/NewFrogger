@@ -50,5 +50,9 @@ export class Frog
         }
 
     }
+    getBounds()
+    {
+        return this.sprites.getBounds();
+    }
     
 }
