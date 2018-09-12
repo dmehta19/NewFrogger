@@ -22,6 +22,7 @@ export class CarLine{
         this.game = _game;
         // load image
         this.sprites = [];
+         
 
         for (var i = 0; i<this.amount; i++){
 
@@ -34,27 +35,36 @@ export class CarLine{
         }
 
         for(var i = 0; i<this.amount; i++){
-            this.sprites.push(this.game.add.sprite(this.positions[i] + this.width/2,32*this.row-16,this.name));
+            this.sprites.push(this.game.physics.add.sprite(this.positions[i] + this.width/2,32*this.row-16,this.name).setOrigin(0,0));
         }
-       
-
-
     }
 
     drawCar(){
         // update position
         for(var i = 0; i<this.amount;i++){
-            this.positions[i] += this.dir*this.speed;
-            if(this.positions[i] > 800 && this.dir>0){
-                this.positions[i] = 0;
-            }
+            this.sprites[i].setVelocityX(50);
+            //this.positions[i] += this.dir*this.speed;
+            // this.positions[i] = this.sprites[i].x;
+            // if(this.positions[i] > 800 && this.dir>0){
+            //     this.positions[i] = 0;
+            // }
 
-            if(this.positions[i]<0 && this.dir<0){
-                this.positions[i] = 0;
-            }
-
-            this.sprites[i].x = this.positions[i];
+            // if(this.positions[i]<0 && this.dir<0){
+            //     this.positions[i] = 0;
+            // }
+            
+            //this.sprites[i].x = this.positions[i];
         }
 
+    }
+    update(){
+        for(var i = 0; i<this.amount;i++){
+        if(this.sprites[i].x > 800 ){
+            console.log("outside bounds");
+            this.sprites[i].x= 0;
+        }
+
+       
+    }
     }
 }
