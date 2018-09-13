@@ -35,7 +35,7 @@ export class CarLine{
         }
 
         for(var i = 0; i<this.amount; i++){
-            this.sprites.push(this.game.physics.add.sprite(this.positions[i] + this.width/2,32*this.row-16,this.name).setOrigin(0,0));
+            this.sprites.push(this.game.physics.add.sprite(this.positions[i] + this.width/2,32*this.row + 16,this.name));
         }
     }
 
@@ -60,7 +60,7 @@ export class CarLine{
     update(){
         for(var i = 0; i<this.amount;i++){
         if(this.sprites[i].x > 800 ){
-            console.log("outside bounds");
+           
             this.sprites[i].x= 0;
         }
 
