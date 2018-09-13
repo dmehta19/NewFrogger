@@ -16,6 +16,9 @@ var config = {
             debug: false
         }
     },
+    audio: {
+        disableWebAudio: true
+    },
     
     scene: [level1]
 };

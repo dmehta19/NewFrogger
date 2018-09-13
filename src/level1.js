@@ -2,6 +2,7 @@ import {Frog} from "./Character/Frog";
 import { CarLine } from "./CarLine";
 
 export class level1 extends Phaser.Scene{
+    
     constructor (){
         super({key:"level1"});
         this.frog;
@@ -19,6 +20,17 @@ export class level1 extends Phaser.Scene{
         this.baseSpeed = 4;
 
         this.paused;
+
+        //Sound Configuration
+        this.audioConfig= {
+            mute: false,
+            volume: 1,
+            rate: 1,
+            detune: 0,
+            seek: 0,
+            loop: true,
+            delay: 0
+        };
     }
 
     preload(){
@@ -30,6 +42,8 @@ export class level1 extends Phaser.Scene{
         this.load.image('Goal','/assets/Environment/Goal_Tile_Old.png');
         this.load.image('Water','/assets/Environment/Water_Tile.png')
         this.load.image('Obstacle','/assets/Environment/Dirt_Tile.png');
+        this.load.audio('InLevelBGM','/assets/Sounds/Level BGM2-Weapons.mp3');
+        this.load.audio('PlayerKilled','/assets/Sounds/Male Death Cry.wav');
 
         try {
             this.load.image('frogger_tiles', '/assets/Environment/Frogger_TileMap.png');
@@ -43,7 +57,7 @@ export class level1 extends Phaser.Scene{
     create(){
         const level1 = 
         [
-            [15,15,15,15,15,15,15,16,15,15,15,15,15,15,15],
+            [15,15,15,15,15,15,15,17,15,15,15,15,15,15,15],
             [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
             [9,9,9,9,9,9,9,9,9,9,9,9,9,9,9],
             [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
@@ -71,8 +85,8 @@ export class level1 extends Phaser.Scene{
        
         //this.obstacles = this.physics.add.staticGroup();
         this.LoadHazardsAndObstacles(level1);
-        this.Goal = this.physics.add.staticGroup();
-        this.Goal.create(32*7 +16 ,0+16,'Goal');
+        //this.Goal = this.physics.add.staticGroup();
+        this.Goal= this.physics.add.sprite(32*7 +16 ,0+16,'Goal');
         //this.Goal = this.physics.add.staticGroup();
         //this.obstacles.body.setGravityY(100);
        
@@ -90,14 +104,18 @@ export class level1 extends Phaser.Scene{
         //this.obstacles = this.physics.add.staticGroup();
 
          //Colliding with obstacles
-         this.physics.add.collider(this.Goal,this.frog.sprites,this.hitObstacle,null,this);
+         this.physics.add.overlap(this.obstacles,this.frog.sprites,this.hitObstacle,null,this);
 
         //Using physics overlap for dealing with overlapping sprites
         this.physics.add.overlap(this.frog.sprites, this.carline1.sprites, this.printOverlap, null, this);
         this.physics.add.overlap(this.frog.sprites, this.hazards, this.printOverlap, null, this);
-        //this.physics.add.overlap(this.frog.sprites,this.Goal,this.OnReachingGoal,null,this);
+        this.physics.add.overlap(this.frog.sprites,this.Goal,this.OnReachingGoal,null,this);
 
-       
+        //playing sound
+        var music = this.sound.add('InLevelBGM');
+        
+
+        music.play(this.audioConfig);
        
     }
 
@@ -145,6 +163,7 @@ export class level1 extends Phaser.Scene{
     }
 
     OnReachingGoal(){
+        //this.Goal.alpha = 0;
         this.time.addEvent({delay : 1000 , callback: this.printWinScreen, callbackScope: this });
     }
 
@@ -167,5 +186,7 @@ export class level1 extends Phaser.Scene{
     }
     hitObstacle(){
         console.log("hit obstacle");
+       
+        this.frog.returnToPrevPosition();
     }
 }
