@@ -19,7 +19,16 @@ export class level1 extends Phaser.Scene{
         //base speed for carline
         this.baseSpeed = 4;
 
+        //Audio files loaders
+        this.bgmMusic;
+        this.winMusic;
+        this.loseMusic;
+
+        //boolean flags
         this.paused;
+            
+        this.playerKilled;
+        this.reachedGoal;
 
         //Sound Configuration
         this.audioConfig= {
@@ -38,12 +47,15 @@ export class level1 extends Phaser.Scene{
         
         this.endTimer = false;
         this.paused = false;
-        this.loss = false;
+        this.playerKilled = false;
+        this.reachedGoal = false;
+        //Load files
         this.load.image('Goal','/assets/Environment/Goal_Tile_Old.png');
         this.load.image('Water','/assets/Environment/Water_Tile.png')
         this.load.image('Obstacle','/assets/Environment/Dirt_Tile.png');
         this.load.audio('InLevelBGM','/assets/Sounds/Level BGM2-Weapons.mp3');
         this.load.audio('PlayerKilled','/assets/Sounds/Male Death Cry.wav');
+        this.load.audio('ReachedGoal','/assets/Sounds/Level Complete.wav')
 
         try {
             this.load.image('frogger_tiles', '/assets/Environment/Frogger_TileMap.png');
@@ -55,6 +67,30 @@ export class level1 extends Phaser.Scene{
     }
 
     create(){
+       
+        //Load TileMap
+        this.loadTileMap();
+       
+       
+        // The player and its settings
+        this.frog.create();
+        this.carline1 = new CarLine(13,5,this.baseSpeed,2,'Car_sprite_01',this);
+        this.carline1.drawCar();
+        
+        
+        //Load Timer event
+        this.loadTimer();
+         
+        //Load collision events
+        this.loadCollisionHandlers();
+
+        //Load sound objects
+        this.loadSoundHandlers();
+        
+    }
+
+    loadTileMap(){
+
         const level1 = 
         [
             [15,15,15,15,15,15,15,17,15,15,15,15,15,15,15],
@@ -83,54 +119,60 @@ export class level1 extends Phaser.Scene{
 
         const layer = map.createStaticLayer(0, tiles, 0, 0);
        
-        //this.obstacles = this.physics.add.staticGroup();
+        //Loads hazards and obstacles as physics sprites
         this.LoadHazardsAndObstacles(level1);
-        //this.Goal = this.physics.add.staticGroup();
+       
+        //load goal sprite
         this.Goal= this.physics.add.sprite(32*7 +16 ,0+16,'Goal');
-        //this.Goal = this.physics.add.staticGroup();
-        //this.obstacles.body.setGravityY(100);
-       
-       
-        // The player and its settings
-        this.frog.create();
-       
-        this.carline1 = new CarLine(13,5,this.baseSpeed,2,'Car_sprite_01',this);
-        this.carline1.drawCar();
+    }
+
+    loadTimer(){
         //creating Timer objects
         this.TimerText = this.add.text(0,0,'Time : 100',this);
         this.TimerValue = 100;
+
         //timer event set for 100 secs
         this.timer = this.time.addEvent({delay : 100000 , callback: this.printLoseScreen, callbackScope: this });
-        //this.obstacles = this.physics.add.staticGroup();
+    }
 
-         //Colliding with obstacles
-         this.physics.add.overlap(this.obstacles,this.frog.sprites,this.hitObstacle,null,this);
+    loadCollisionHandlers(){
+        //Colliding with obstacles
+        this.physics.add.overlap(this.obstacles,this.frog.sprites,this.hitObstacle,null,this);
 
         //Using physics overlap for dealing with overlapping sprites
-        this.physics.add.overlap(this.frog.sprites, this.carline1.sprites, this.printOverlap, null, this);
-        this.physics.add.overlap(this.frog.sprites, this.hazards, this.printOverlap, null, this);
+        this.physics.add.overlap(this.frog.sprites, this.carline1.sprites, this.playPlayerKilledMusic, null, this);
+        this.physics.add.overlap(this.frog.sprites, this.hazards, this.playPlayerKilledMusic, null, this);
         this.physics.add.overlap(this.frog.sprites,this.Goal,this.OnReachingGoal,null,this);
 
-        //playing sound
-        var music = this.sound.add('InLevelBGM');
-        
-
-        music.play(this.audioConfig);
-       
     }
+
+    loadSoundHandlers(){
+        //creating sound variables
+        this.bgmMusic = this.sound.add('InLevelBGM');
+        this.winMusic = this.sound.add('ReachedGoal');
+        this.loseMusic = this.sound.add('PlayerKilled');
+        
+        //start playing level bgm
+        this.bgmMusic.play(this.audioConfig);
+    }
+    
 
     update()
     {
+        //update timer text
         if(!this.endTimer)
             this.TimerText.text = "Time : " + Math.floor(100-(this.timer.getElapsed()/1000));
         
+        //Update player and car 
         if(!this.paused)
         {
              this.frog.update(this.input.keyboard.createCursorKeys());
              this.carline1.update();
              
+             
         }
     }
+
     restartGame(){
                 
         this.scene.restart();
@@ -138,38 +180,42 @@ export class level1 extends Phaser.Scene{
     }
    
     printWinScreen(){
-       
+             
+         
+        //setting win screen text
+        this.ScreenText = this.add.text(220,230,'You won',this);
+        this.time.addEvent({delay : 4000 , callback: this.restartGame, callbackScope: this });
         
-            this.ScreenText = this.add.text(220,230,'You won',this);
-            this.time.addEvent({delay : 4000 , callback: this.restartGame, callbackScope: this });
-        
-        
+        //check in update function to pause other objects movement
         this.paused = true;
     }
 
     printLoseScreen(){
-       
-        
+                
+        //setting lose screen text
         this.ScreenText = this.add.text(210,230,'You Lose',this);
         this.time.addEvent({delay : 4000 , callback: this.restartGame, callbackScope: this });
     
-    
-    this.paused = true;
+        //check in update function to pause other objects movement
+        this.paused = true;
     }
 
-    printOverlap(){
-        
-       // console.log("player entered hazard");
-    }
+   
 
     OnReachingGoal(){
+        
         //this.Goal.alpha = 0;
+         //playing win music
+         if(!this.reachedGoal){
+         this.playPlayerKilledMusic();
+        }
+        
         this.time.addEvent({delay : 1000 , callback: this.printWinScreen, callbackScope: this });
     }
 
     LoadHazardsAndObstacles(level1)
     {
-
+        //Looking for hazards and obstacles and adding them to the respective array objects
         for(var i= 0;i<15;i++){
             for(var j=0;j<15;j++){
                 if(level1[i][j]==3){
@@ -184,9 +230,44 @@ export class level1 extends Phaser.Scene{
         }
 
     }
-    hitObstacle(){
-        console.log("hit obstacle");
+    playPlayerWonMusic(){
+        //stop bgm music
+        if(this.bgmMusic.isPlaying)
+        {
+            this.bgmMusic.stop();
+        }
+
+        this.winMusic.play(this.audioConfig);
+        this.reachedGoal = true;
+      
+         
+        
+    }
+    playPlayerKilledMusic(){
+
+        //only play for the first time this is called
+        if(!this.playerKilled)
+        {
+            this.loseMusic.play();
+            
+
+            if(this.bgmMusic.isPlaying)
+            {
+                this.bgmMusic.stop();
+            }
+        }
+
+        this.playerKilled = true;
        
+        this.printLoseScreen();
+
+    }
+    
+
+    hitObstacle(){
+
+        console.log("hit obstacle");
+       // returning to previous position because of collision
         this.frog.returnToPrevPosition();
     }
 }
