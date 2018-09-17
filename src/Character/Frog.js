@@ -54,7 +54,7 @@ export class Frog
 
         // Render the frog to the screen
         if (!this.isDie)
-        {this.sprites = this.scene.add.sprite(this.PositionX,this.PositionY,'frog');}
+        {this.sprites = this.scene.physics.add.sprite(this.PositionX,this.PositionY,'frog');}
             this.collider =new Phaser.Geom.Rectangle(this.sprites.x-this.width/2+16, this.sprites.y-this.height/2+16,this.width, this.height);
            
         // Create the control keys dict

@@ -16,7 +16,25 @@ export class level1 extends Phaser.Scene{
 
         this.baseSpeed = 2;
         this.paused = false;
-        
+
+        //sound variables
+        this.bgmMusic;
+        this.winMusic;
+        this.loseMusic;
+        //Sound Configuration
+        this.audioConfig= {
+            mute: false,
+            volume: 1,
+            rate: 1,
+            detune: 0,
+            seek: 0,
+            loop: true,
+            delay: 0
+        };
+
+
+        this.playerKilled;
+        this.reachedGoal;
         this.isGameOver = false;
     }
     preload(){
@@ -25,6 +43,11 @@ export class level1 extends Phaser.Scene{
         this.endTimer = false;
         this.paused = false;
         this.loss = false;
+
+        //set to false at the start of the level
+        this.playerKilled = false;
+        this.reachedGoal = false;
+
         this.load.image('Goal','/assets/Environment/Goal_Tile_Old.png');
         try {
             // environments
@@ -35,6 +58,12 @@ export class level1 extends Phaser.Scene{
             // characters
             this.load.image('Car_sprite_01','/assets/Imgs/Cars/Car_sprite_01.png');
             this.load.image('bullet','/assets/Imgs/Cars/Car_sprite_01.png');
+
+            //audio
+            this.load.audio('InLevelBGM','/assets/Sounds/Level BGM2-Weapons.mp3');
+            this.load.audio('PlayerKilled','/assets/Sounds/Male Death Cry.wav');
+            this.load.audio('ReachedGoal','/assets/Sounds/Level Complete.wav')
+
 
         } catch (error) {
             alert(error.message);
@@ -72,7 +101,8 @@ export class level1 extends Phaser.Scene{
         const tiles = map.addTilesetImage('frogger_tiles');
         const layer = map.createStaticLayer(0, tiles, 0, 0);
 
-        this.Goal = this.add.image(32*8 - 16,16,'Goal');
+        this.Goal= this.physics.add.sprite(32*7 +16 ,0+16,'Goal');
+    
         // The player and its settings
 
         
@@ -101,12 +131,18 @@ export class level1 extends Phaser.Scene{
         //timer event set for 100 secs
         this.timer = this.time.addEvent({delay : 100000 , callback: this.printLoseScreen, callbackScope: this });
 
+        //load sound objects
+        this.loadSoundHandlers();
+
         this.frog.create(level1);
 
         // bullet pull
         this.pool = new BulletPool(30,this.frog,this, this.timer);
         
         //this.pool.GenerateNextBullet(240,16,false);
+        //Overlapping with the goal
+        this.physics.add.overlap(this.frog.sprites,this.Goal,this.OnReachingGoal,null,this);
+
         // //  Input Events
         // this.cursors = this.input.keyboard.createCursorKeys();
     }
@@ -154,7 +190,8 @@ export class level1 extends Phaser.Scene{
                         console.log(this.frog.collider);
                         this.frog.die();
                         this.paused = true;
-                        this.printLoseScreen();
+                        this.playPlayerKilledMusic();
+                        //this.printLoseScreen();
                     }
                   }
               }
@@ -178,7 +215,8 @@ export class level1 extends Phaser.Scene{
             if(this.frog.inArea[0] == 3 && !this.frog.onlog && this.frog.isMoveDone){
                 this.frog.die();
                 this.paused = true;
-                this.printLoseScreen();
+                this.playPlayerKilledMusic();
+                //this.printLoseScreen();
             }
 
         }
@@ -218,5 +256,57 @@ export class level1 extends Phaser.Scene{
   
        
     }
+    loadSoundHandlers(){
+        //creating sound variables
+        this.bgmMusic = this.sound.add('InLevelBGM');
+        this.winMusic = this.sound.add('ReachedGoal');
+        this.loseMusic = this.sound.add('PlayerKilled');
+        
+        //start playing level bgm
+        this.bgmMusic.play(this.audioConfig);
+    }
+    OnReachingGoal(){
+        
+        //this.Goal.alpha = 0;
+         //playing win music
+         if(!this.reachedGoal){
+         this.playPlayerWonMusic();
+        }
+        
+        this.time.addEvent({delay : 1000 , callback: this.printWinScreen, callbackScope: this });
+    }
+    playPlayerKilledMusic(){
+
+        //only play for the first time this is called
+        if(!this.playerKilled)
+        {
+            this.loseMusic.play();
+            
+
+            if(this.bgmMusic.isPlaying)
+            {
+                this.bgmMusic.stop();
+            }
+        }
+
+        this.playerKilled = true;
+       
+        this.printLoseScreen();
+
+    }
+    playPlayerWonMusic(){
+        //stop bgm music
+        if(this.bgmMusic.isPlaying)
+        {
+            this.bgmMusic.stop();
+        }
+
+        this.winMusic.play();
+        this.reachedGoal = true;
+      
+         
+        
+    }
+
 
 }
