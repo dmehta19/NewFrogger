@@ -3,8 +3,8 @@ export class Frog
 {
     constructor (_scene){
        // super({key:"Frog"});
-        this.PositionX = 32*8 + 16;
-        this.PositionY = 32*10 + 16;
+        this.PositionX = 32*7 + 16;
+        this.PositionY = 32*11 + 16;
         this.Velocity;
         this.scene = _scene;
         this.speed = 1;

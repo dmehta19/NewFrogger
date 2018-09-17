@@ -4,7 +4,7 @@ export class CarLine{
     constructor(_line, _amount,_speed, _size,_name,_game){
         
         //int: The id of row that this car line stand in
-        this.row = _line;
+        this.row = _line - 1;
         //int: How many cars in this car line
         this.amount = _amount;
         //float: The speed of the car line
@@ -42,7 +42,7 @@ export class CarLine{
     drawCar(){
         // update position
         for(var i = 0; i<this.amount;i++){
-            this.sprites[i].setVelocityX(50);
+            this.sprites[i].setVelocityX(100 * this.speed);
             //this.positions[i] += this.dir*this.speed;
             // this.positions[i] = this.sprites[i].x;
             // if(this.positions[i] > 800 && this.dir>0){

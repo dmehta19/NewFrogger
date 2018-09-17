@@ -16,8 +16,11 @@ export class level1 extends Phaser.Scene{
         //Load all obstacles into this array
         this.obstacles=[];
 
+        //Moving Hazards
+        this.movingHazards = [];
+
         //base speed for carline
-        this.baseSpeed = 4;
+        this.baseSpeed = 3;
 
         //Audio files loaders
         this.bgmMusic;
@@ -74,8 +77,9 @@ export class level1 extends Phaser.Scene{
        
         // The player and its settings
         this.frog.create();
-        this.carline1 = new CarLine(13,5,this.baseSpeed,2,'Car_sprite_01',this);
-        this.carline1.drawCar();
+        
+        //load moving objects (cars and logs)
+        this.loadMovingObjects();
         
         
         //Load Timer event
@@ -126,6 +130,23 @@ export class level1 extends Phaser.Scene{
         this.Goal= this.physics.add.sprite(32*7 +16 ,0+16,'Goal');
     }
 
+    loadMovingObjects(){
+        this.carLines = [
+            new CarLine(2,3,this.baseSpeed+1,1,'Car_sprite_01',this),
+            new CarLine(10,3,this.baseSpeed-1,1,'Car_sprite_01',this),
+            new CarLine(11,4,this.baseSpeed,1,'Car_sprite_01',this),
+            new CarLine(13,4,this.baseSpeed+1,1,'Car_sprite_01',this),
+            new CarLine(14,3,this.baseSpeed-1,1,'Car_sprite_01',this)
+       ];
+       this.carLines.forEach(function(element) {
+        element.drawCar();
+        // element.sprites.forEach(function(el) {
+        //         this.movingHazards.push(el);
+        // })
+      });
+
+    }
+
     loadTimer(){
         //creating Timer objects
         this.TimerText = this.add.text(0,0,'Time : 100',this);
@@ -138,9 +159,14 @@ export class level1 extends Phaser.Scene{
     loadCollisionHandlers(){
         //Colliding with obstacles
         this.physics.add.overlap(this.obstacles,this.frog.sprites,this.hitObstacle,null,this);
-
+        let thisScene = this;
         //Using physics overlap for dealing with overlapping sprites
-        this.physics.add.overlap(this.frog.sprites, this.carline1.sprites, this.playPlayerKilledMusic, null, this);
+        this.carLines.forEach(function(element) {
+            thisScene.physics.add.overlap(thisScene.frog.sprites,element.sprites,thisScene.playPlayerKilledMusic,null,thisScene);
+            
+          });
+    
+       // this.physics.add.overlap(this.frog.sprites, this.movingHazards, this.playPlayerKilledMusic, null, this);
         this.physics.add.overlap(this.frog.sprites, this.hazards, this.playPlayerKilledMusic, null, this);
         this.physics.add.overlap(this.frog.sprites,this.Goal,this.OnReachingGoal,null,this);
 
@@ -167,8 +193,9 @@ export class level1 extends Phaser.Scene{
         if(!this.paused)
         {
              this.frog.update(this.input.keyboard.createCursorKeys());
-             this.carline1.update();
-             
+             this.carLines.forEach(function(element) {
+                element.update();
+              });
              
         }
     }
