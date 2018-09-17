@@ -28,6 +28,8 @@ export class CarLine{
         // load image
         this.sprites = [];
 
+        console.log(this.game);
+
         // init the interval between cars
         for (var i = 0; i<this.amount; i++){
 

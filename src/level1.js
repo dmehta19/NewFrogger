@@ -2,6 +2,7 @@ import {Frog} from "./Character/Frog";
 import { CarLine } from "./CarLine";
 import { Collision } from "./Engine/Collision";
 import { LogLines } from "./GameClass/LogLines";
+import { BulletPool } from "./GameClass/BulletPool";
 
 export class level1 extends Phaser.Scene{
     
@@ -33,11 +34,13 @@ export class level1 extends Phaser.Scene{
 
             // characters
             this.load.image('Car_sprite_01','/assets/Imgs/Cars/Car_sprite_01.png');
+            this.load.image('bullet','/assets/Imgs/Cars/Car_sprite_01.png');
 
         } catch (error) {
             alert(error.message);
         }
         this.frog.preload();
+
     }
 
     create(){
@@ -99,6 +102,11 @@ export class level1 extends Phaser.Scene{
         this.timer = this.time.addEvent({delay : 100000 , callback: this.printLoseScreen, callbackScope: this });
 
         this.frog.create(level1);
+
+        // bullet pull
+        this.pool = new BulletPool(30,this.frog,this, this.timer);
+        
+        //this.pool.GenerateNextBullet(240,16,false);
         // //  Input Events
         // this.cursors = this.input.keyboard.createCursorKeys();
     }
@@ -110,7 +118,17 @@ export class level1 extends Phaser.Scene{
         
         if(!this.paused)
         {
+            // update bullet
+            this.pool.bullets.forEach(element => {
+                if(element.canMove){
+                    element.UpdatePosition();
+                }
+            });
+            // pool to generate bullet from top
+            this.pool.GenerateBulletFromTop(3000);
+
             this.frog.update(this.input.keyboard.createCursorKeys());
+            
         
             if (Phaser.Geom.Intersects.RectangleToRectangle(this.frog.getBounds(), this.Goal.getBounds())) 
             {
