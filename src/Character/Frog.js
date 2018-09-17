@@ -49,39 +49,6 @@ export class Frog
     update(cursors)
     {
        
-        
-        
-        // if (Phaser.Input.Keyboard.JustDown(this.cursors['LEFT']) )
-        // {
-        //     this.sprites.setVelocityX(-50);
-        //     //this.scene.physics.moveTo(this.sprites,this.sprites.x-2,this.sprites.y,30,1);
-        // }
-        // if (Phaser.Input.Keyboard.JustDown(this.cursors['RIGHT']))
-        // {
-        //     this.sprites.setVelocityX(50);
-        //    // this.scene.physics.moveTo(this.sprites,this.sprites.x+2,this.sprites.y,30,1);
-        // }
-
-        
-        // if(Phaser.Input.Keyboard.JustDown(this.cursors['UP']) )
-        // {
-        //    this.sprites.setVelocityY(-50);
-        //     //this.LastPositionY = this.sprites.y;
-        //     //this.scene.physics.moveTo(this.sprites,this.sprites.x,this.LastPositionY -2,30,1);
-            
-        // }
-
-        
-        // if (Phaser.Input.Keyboard.JustDown(this.cursors['DOWN']) )
-        // {
-        //     this.sprites.setVelocityY(50);
-        //    // this.scene.physics.moveTo(this.sprites,this.sprites.x,this.sprites.y+2,30,1);
-
-        // }
-
-        
-
-       
         this.LastPositionX = this.sprites.x;
         this.LastPositionY = this.sprites.y;
 
@@ -144,14 +111,15 @@ export class Frog
 
         }
         
-        // this.sprites.setVelocityY(0.001);
-        // this.sprites.setVelocityX(0.001);
+        
 
     }
     getBounds()
     {
         return this.sprites.getBounds();
     }
+
+    //This is called when frog collides with static obstacles
     returnToPrevPosition(){
         this.sprites.x = this.LastPositionX;
         this.sprites.y = this.LastPositionY;
