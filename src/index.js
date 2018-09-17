@@ -9,6 +9,16 @@ var config = {
     height: 480,
     pixelart: true,
     zoom: 5,
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 },
+            debug: false
+        }
+    },
+    audio: {
+        disableWebAudio: true
+    },
     scene: [level1]
 };
 
