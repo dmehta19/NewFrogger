@@ -8,8 +8,8 @@ export class Frog
 {
     constructor (_scene){
        // super({key:"Frog"});
-        this.PositionX = (32 * 7)+16;  // Start PositionX
-        this.PositionY = 480-16;  // Start PositionY
+        this.PositionX = 128;  // Start PositionX
+        this.PositionY = 464;  // Start PositionY
         this.scene = _scene;   // Level scene from LEVEL class
         this.MoveDis = 32;     // Each Step moving Distance
         this.MaxSpeed = 2;     // Max speed for moving speed
@@ -24,6 +24,10 @@ export class Frog
         this.height = 20;
         this.collider = new Phaser.Geom.Rectangle(this.PositionX-this.width/2+16, this.PositionY-this.height/2+16,this.width, this.height);
 
+        
+        this.LastPositionX;
+        this.LastPositionY;    
+        
         this.alongSpd = 0;
         this.onlog = false;
 
@@ -54,8 +58,7 @@ export class Frog
 
         // Render the frog to the screen
         if (!this.isDie)
-        {
-            this.sprites = this.scene.physics.add.sprite(this.PositionX,this.PositionY,'frog');}
+        {this.sprites = this.scene.physics.add.sprite(this.PositionX,this.PositionY,'frog');}
             this.collider =new Phaser.Geom.Rectangle(this.sprites.x-this.width/2+16, this.sprites.y-this.height/2+16,this.width, this.height);
            
         // Create the control keys dict
@@ -72,6 +75,9 @@ export class Frog
         // To Check if it's moving.
         if (!this.isDie)
         {
+            this.LastPositionX = this.sprites.x;
+            this.LastPositionY = this.sprites.y;
+
 
             // move along log
             if(this.alongSpd != 0){
@@ -172,6 +178,11 @@ export class Frog
         
         console.log("X: " + playerInX + " Y: " + playerInY + " in area: " +this.inArea[0]);
 
+    }
+    returnToPrevPosition(){
+        this.sprites.x = this.LastPositionX;
+        this.sprites.y = this.LastPositionY;
+        this.collider = new Phaser.Geom.Rectangle(this.sprites.x-this.width/2+16, this.sprites.y-this.height/2+16,this.width, this.height);
     }
     
 }
