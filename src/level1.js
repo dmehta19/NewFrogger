@@ -58,7 +58,8 @@ export class level1 extends Phaser.Scene{
             this.load.image('log_middle', '/assets/Environment/Log_Middle.png');
 
             // characters
-            this.load.image('Car_sprite_01','/assets/Imgs/Cars/Tank-0001.png');
+            this.load.image('Tank_0001','/assets/Imgs/Cars/Tank-0001.png');
+            this.load.image('Car_0001','/assets/Imgs/Cars/Car_sprite_01.png');
             this.load.image('bullet','/assets/Imgs/Bullet/Bullet_Single.png');
 
             //audio
@@ -132,11 +133,11 @@ export class level1 extends Phaser.Scene{
         let thisScene = this;
         // bullet pull
         this.carLines = [
-            new CarLine(2,2,this.baseSpeed+1,2,'Car_sprite_01',this,this.timer),
-            new CarLine(10,3,this.baseSpeed+1,2,'Car_sprite_01',this,this.timer),
-            new CarLine(11,1,this.baseSpeed+2,2,'Car_sprite_01',this,this.timer),
-            new CarLine(13,2,this.baseSpeed-1,2,'Car_sprite_01',this,this.timer),
-            new CarLine(14,3,this.baseSpeed-1,2,'Car_sprite_01',this,this.timer)
+            new CarLine(2,2,this.baseSpeed+1,2,'Tank_0001',this,this.timer, true),
+            new CarLine(10,3,this.baseSpeed+1,1,'Car_0001',this,this.timer, false),
+            new CarLine(11,1,this.baseSpeed+2,2,'Tank_0001',this,this.timer, true),
+            new CarLine(13,2,this.baseSpeed-1,1,'Car_0001',this,this.timer, false),
+            new CarLine(14,3,this.baseSpeed-1,2,'Tank_0001',this,this.timer, true)
         ];
         this.pool = new BulletPool(30,this.frog,this, this.timer);
         this.pool.bullets.forEach(function(element) {
@@ -170,7 +171,7 @@ export class level1 extends Phaser.Scene{
                 }
             });
             // pool to generate bullet from top
-            this.pool.GenerateBulletFromTop(3000);
+        //    this.pool.GenerateBulletFromTop(3000);
 
             this.frog.update(this.input.keyboard.createCursorKeys());
             
@@ -179,11 +180,14 @@ export class level1 extends Phaser.Scene{
             {
                 this.time.addEvent({delay : 1000 , callback: this.printWinScreen, callbackScope: this });
             }
-
+            var inY = this.frog.playerInY;
+            var inX = this.frog.playerInX;
+            console.log("Player In: " + inY);
             // drawing carlines
             this.carLines.forEach(function(element) {
                 element.drawCar();
-                element.generateBullet(Math.floor(Math.random()*2000) + 2000);
+                if(element.canShoot && inY != element.row-2 && inY!= element.row)
+                    element.generateBullet(2000, inX);
               });
 
               // draw logs

@@ -31,6 +31,8 @@ export class Frog
         this.area;
         this.mapHei;
         this.mapWid;
+        this.playerInX;
+        this.playerInY;
         // 4 size array to represent where player is
         this.inArea = [];
     }
@@ -39,7 +41,7 @@ export class Frog
     preload()
     {
         // preload the frog assets.
-        this.scene.load.image('frog', '/assets/Character/soilder/solider-0002.png');
+        this.scene.load.image('frog', '/assets/Character/soilder/solider-0001.png');
 
     } 
 
@@ -162,14 +164,14 @@ export class Frog
     }
 
     updateArea(){
-        var playerInX = Math.floor(15*this.sprites.x/480);
-        var playerInY = Math.floor(15*this.sprites.y/480);
+        this.playerInX = Math.floor(15*this.sprites.x/480);
+        this.playerInY = Math.floor(15*this.sprites.y/480);
 
         this.inArea = [
-            this.area[playerInY][playerInX]
+            this.area[this.playerInY][this.playerInX]
         ];
         
-        console.log("X: " + playerInX + " Y: " + playerInY + " in area: " +this.inArea[0]);
+        console.log("X: " + this.playerInX + " Y: " + this.playerInY + " in area: " +this.inArea[0]);
 
     }
     
