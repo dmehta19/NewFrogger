@@ -1,7 +1,7 @@
 import 'phaser';
 
 export class CarLine{
-    constructor(_line, _amount,_speed, _size,_name,_game){
+    constructor(_line, _amount,_speed, _size,_name,_game,_timer){
         
         //int: The id of row that this car line stand in
         this.row = _line;
@@ -27,6 +27,11 @@ export class CarLine{
         this.game = _game;
         // load image
         this.sprites = [];
+        this.timer = _timer;
+        this.pool;
+        this.currentTime = 0;
+        this.dropTime = 0;
+        this.isCoolDowning = false;
 
         console.log(this.game);
 
@@ -78,5 +83,24 @@ export class CarLine{
             
         }
 
+    }
+
+    generateBullet(i_interval){
+        this.currentTime = this.timer.getElapsed(); 
+
+        if(!this.isCoolDowning){
+            // shoot bullet
+            var temp = this.sprites[Math.floor(Math.random()*this.amount)];
+            this.pool.GenerateNextBullet(temp.x, temp.y,false);
+            this.isCoolDowning = true;
+            this.dropTime = this.currentTime + i_interval;
+        }
+        
+        if(this.isCoolDowning){
+            if(this.currentTime > this.dropTime){
+                // cool down finish
+                this.isCoolDowning = false;
+            }
+        }
     }
 }

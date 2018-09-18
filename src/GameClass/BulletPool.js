@@ -1,7 +1,7 @@
 import { Bullet } from "./Bullet";
 
 export class BulletPool{
-    constructor(i_bulletAmount,_frog,_game, _timer){
+    constructor(i_bulletAmount,_frog,_game, _timer, _cars){
         this.bullets = [];
         this.player = _frog;
         this.game = _game;
@@ -16,7 +16,7 @@ export class BulletPool{
 
         // init pool
         for(var i =0; i<i_bulletAmount;i++){
-            this.bullets.push(new Bullet(i,0,0,2,'bullet',this.player,false,this.game));
+            this.bullets.push(new Bullet(i,0,0,1,'bullet',this.player,false,this.game));
         }
 
         this.NextIdToBeUse = 0;

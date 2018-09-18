@@ -20,6 +20,9 @@ export class Bullet{
             // the dir point 
             this.dir[0] = 0;
             this.dir[1] = this.player.sprites.y - this.y;
+
+            if(this.dir[1]<0)
+            this.sprite.flipY = true;
         }
 
         this.normalizeDir();
@@ -28,9 +31,8 @@ export class Bullet{
         // create sprite
         this.sprite = this.game.physics.add.sprite(this.x,this.y,s_name);
         this.sprite.visible = false;
-        if(this.dir[1]<0){
-            this.sprite.flipY = true;
-        }
+        
+        this.sprite.flipY = this.dir[1]<0?true:false;
     }
 
     
@@ -70,6 +72,9 @@ export class Bullet{
             // the dir point 
             this.dir[0] = 0;
             this.dir[1] = this.player.sprites.y - this.y;
+
+            this.sprite.flipY = this.dir[1]<0?true:false;
+
         }
 
         this.normalizeDir();
@@ -80,6 +85,7 @@ export class Bullet{
     GoBackToPool(){
         this.sprite.visible = false;
         this.canMove = false;
+
     }
 
     

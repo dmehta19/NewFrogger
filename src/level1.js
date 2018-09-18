@@ -110,15 +110,7 @@ export class level1 extends Phaser.Scene{
         
 
 
-        this.carLines = [
-            new CarLine(2,2,this.baseSpeed+1,2,'Car_sprite_01',this),
-            new CarLine(10,3,this.baseSpeed+1,2,'Car_sprite_01',this),
-            new CarLine(11,1,this.baseSpeed+2,2,'Car_sprite_01',this),
-            new CarLine(13,2,this.baseSpeed-1,2,'Car_sprite_01',this),
-            new CarLine(14,3,this.baseSpeed-1,2,'Car_sprite_01',this)
-            
-            
-        ];
+
 
         this.logLines = [
             new LogLines(4,3,this.baseSpeed,[2,5],['log_end','log_middle'],this),
@@ -139,11 +131,22 @@ export class level1 extends Phaser.Scene{
         this.frog.create(level1);
         let thisScene = this;
         // bullet pull
+        this.carLines = [
+            new CarLine(2,2,this.baseSpeed+1,2,'Car_sprite_01',this,this.timer),
+            new CarLine(10,3,this.baseSpeed+1,2,'Car_sprite_01',this,this.timer),
+            new CarLine(11,1,this.baseSpeed+2,2,'Car_sprite_01',this,this.timer),
+            new CarLine(13,2,this.baseSpeed-1,2,'Car_sprite_01',this,this.timer),
+            new CarLine(14,3,this.baseSpeed-1,2,'Car_sprite_01',this,this.timer)
+        ];
         this.pool = new BulletPool(30,this.frog,this, this.timer);
         this.pool.bullets.forEach(function(element) {
            thisScene.bullets.push(element.sprite);
           });
-        
+
+          this.carLines.forEach(element => {
+            element.pool = this.pool;
+        });
+
         //this.pool.GenerateNextBullet(240,16,false);
         //Overlapping with the goal
         this.physics.add.overlap(this.frog.sprites,this.Goal,this.OnReachingGoal,null,this);
@@ -180,6 +183,7 @@ export class level1 extends Phaser.Scene{
             // drawing carlines
             this.carLines.forEach(function(element) {
                 element.drawCar();
+                element.generateBullet(Math.floor(Math.random()*2000) + 2000);
               });
 
               // draw logs
