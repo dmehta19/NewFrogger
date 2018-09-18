@@ -105,27 +105,12 @@ export class level1 extends Phaser.Scene{
 
         this.Goal= this.physics.add.sprite(32*7 +16 ,0+16,'Goal');
     
-        // The player and its settings
+        
 
         
 
 
-        this.carLines = [
-            new CarLine(2,2,this.baseSpeed+1,2,'Car_sprite_01',this),
-            new CarLine(10,3,this.baseSpeed+1,2,'Car_sprite_01',this),
-            new CarLine(11,1,this.baseSpeed+2,2,'Car_sprite_01',this),
-            new CarLine(13,2,this.baseSpeed-1,2,'Car_sprite_01',this),
-            new CarLine(14,3,this.baseSpeed-1,2,'Car_sprite_01',this)
-            
-            
-        ];
-
-        this.logLines = [
-            new LogLines(4,3,this.baseSpeed,[2,5],['log_end','log_middle'],this),
-            new LogLines(5,2,this.baseSpeed-1,[2,4],['log_end','log_middle'],this),
-            new LogLines(7,2,this.baseSpeed+1,[3,5],['log_end','log_middle'],this),
-            new LogLines(8,4,this.baseSpeed,[2,2],['log_end','log_middle'],this)
-        ];
+        
 
         //creating Timer objects
         this.TimerText = this.add.text(0,0,'Time : 100',this);
@@ -135,14 +120,10 @@ export class level1 extends Phaser.Scene{
 
         //load sound objects
         this.loadSoundHandlers();
-
+        // The player and its settings
         this.frog.create(level1);
-        let thisScene = this;
-        // bullet pull
-        this.pool = new BulletPool(30,this.frog,this, this.timer);
-        this.pool.bullets.forEach(function(element) {
-           thisScene.bullets.push(element.sprite);
-          });
+       
+       
         
         //this.pool.GenerateNextBullet(240,16,false);
         //Overlapping with the goal
@@ -262,25 +243,8 @@ export class level1 extends Phaser.Scene{
   
        
     }
-    loadSoundHandlers(){
-        //creating sound variables
-        this.bgmMusic = this.sound.add('InLevelBGM');
-        this.winMusic = this.sound.add('ReachedGoal');
-        this.loseMusic = this.sound.add('PlayerKilled');
-        
-        //start playing level bgm
-        this.bgmMusic.play(this.audioConfig);
-    }
-    OnReachingGoal(){
-        
-        //this.Goal.alpha = 0;
-         //playing win music
-         if(!this.reachedGoal){
-         this.playPlayerWonMusic();
-        }
-        
-        this.time.addEvent({delay : 1000 , callback: this.printWinScreen, callbackScope: this });
-    }
+    
+   
     playPlayerKilledMusic(){
 
         //only play for the first time this is called
@@ -318,6 +282,55 @@ export class level1 extends Phaser.Scene{
         this.paused = true;
         this.playPlayerKilledMusic();
         //console.log("Hit a bullet");
+    }
+    OnReachingGoal(){
+        
+        //this.Goal.alpha = 0;
+         //playing win music
+         if(!this.reachedGoal){
+         this.playPlayerWonMusic();
+        }
+        
+        this.time.addEvent({delay : 1000 , callback: this.printWinScreen, callbackScope: this });
+    }
+
+    loadSoundHandlers(){
+        //creating sound variables
+        this.bgmMusic = this.sound.add('InLevelBGM');
+        this.winMusic = this.sound.add('ReachedGoal');
+        this.loseMusic = this.sound.add('PlayerKilled');
+        
+        //start playing level bgm
+        this.bgmMusic.play(this.audioConfig);
+    }
+    
+    loadMovingObjects(){
+        //moving cars
+        this.carLines = [
+            new CarLine(2,2,this.baseSpeed+1,2,'Car_sprite_01',this),
+            new CarLine(10,3,this.baseSpeed+1,2,'Car_sprite_01',this),
+            new CarLine(11,1,this.baseSpeed+2,2,'Car_sprite_01',this),
+            new CarLine(13,2,this.baseSpeed-1,2,'Car_sprite_01',this),
+            new CarLine(14,3,this.baseSpeed-1,2,'Car_sprite_01',this)
+            
+            
+        ];
+
+        //Moving logs
+        this.logLines = [
+            new LogLines(4,3,this.baseSpeed,[2,5],['log_end','log_middle'],this),
+            new LogLines(5,2,this.baseSpeed-1,[2,4],['log_end','log_middle'],this),
+            new LogLines(7,2,this.baseSpeed+1,[3,5],['log_end','log_middle'],this),
+            new LogLines(8,4,this.baseSpeed,[2,2],['log_end','log_middle'],this)
+        ];
+        let thisScene = this;
+
+         // bullet pull
+         this.pool = new BulletPool(30,this.frog,this, this.timer);
+         this.pool.bullets.forEach(function(element) {
+            thisScene.bullets.push(element.sprite);
+           });
+
     }
 
 

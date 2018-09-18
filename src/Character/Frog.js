@@ -8,8 +8,8 @@ export class Frog
 {
     constructor (_scene){
        // super({key:"Frog"});
-        this.PositionX = 128;  // Start PositionX
-        this.PositionY = 464;  // Start PositionY
+        this.PositionX = (32 * 7)+16;  // Start PositionX
+        this.PositionY = 480-16;  // Start PositionY
         this.scene = _scene;   // Level scene from LEVEL class
         this.MoveDis = 32;     // Each Step moving Distance
         this.MaxSpeed = 2;     // Max speed for moving speed
@@ -54,7 +54,8 @@ export class Frog
 
         // Render the frog to the screen
         if (!this.isDie)
-        {this.sprites = this.scene.physics.add.sprite(this.PositionX,this.PositionY,'frog');}
+        {
+            this.sprites = this.scene.physics.add.sprite(this.PositionX,this.PositionY,'frog');}
             this.collider =new Phaser.Geom.Rectangle(this.sprites.x-this.width/2+16, this.sprites.y-this.height/2+16,this.width, this.height);
            
         // Create the control keys dict
