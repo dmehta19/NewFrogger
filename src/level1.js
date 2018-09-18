@@ -14,6 +14,8 @@ export class level1 extends Phaser.Scene{
         this.timer;
         this.endTimer;
 
+        this.bullets = [];
+
         this.baseSpeed = 2;
         this.paused = false;
 
@@ -135,13 +137,17 @@ export class level1 extends Phaser.Scene{
         this.loadSoundHandlers();
 
         this.frog.create(level1);
-
+        let thisScene = this;
         // bullet pull
         this.pool = new BulletPool(30,this.frog,this, this.timer);
+        this.pool.bullets.forEach(function(element) {
+           thisScene.bullets.push(element.sprite);
+          });
         
         //this.pool.GenerateNextBullet(240,16,false);
         //Overlapping with the goal
         this.physics.add.overlap(this.frog.sprites,this.Goal,this.OnReachingGoal,null,this);
+        this.physics.add.overlap(this.frog.sprites,this.bullets,this.hitBullet,null,this);
 
         // //  Input Events
         // this.cursors = this.input.keyboard.createCursorKeys();
@@ -306,6 +312,12 @@ export class level1 extends Phaser.Scene{
       
          
         
+    }
+    hitBullet(){
+        this.frog.die();
+        this.paused = true;
+        this.playPlayerKilledMusic();
+        //console.log("Hit a bullet");
     }
 
 

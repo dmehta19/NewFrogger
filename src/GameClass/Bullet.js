@@ -26,7 +26,7 @@ export class Bullet{
 
        
         // create sprite
-        this.sprite = this.game.add.sprite(this.x,this.y,s_name);
+        this.sprite = this.game.physics.add.sprite(this.x,this.y,s_name);
         this.sprite.visible = false;
         if(this.dir[1]<0){
             this.sprite.flipY = true;
@@ -45,7 +45,7 @@ export class Bullet{
             this.sprite.y += this.dir[1] * this.speed;
 
         if(this.sprite.x > 480 || this.sprite.x < -32 || 
-            this.sprite.y < -32 || this.sprite.y > 480){
+            this.sprite.y < -32 || this.sprite.y > 550){
                 // go back to pool because of collision with boundary
                 this.GoBackToPool();
                 console.log("Bullet" + this.id +" goes back to pool because of out of boundary");
