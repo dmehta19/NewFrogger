@@ -113,7 +113,7 @@ export class level1 extends Phaser.Scene{
         this.carLines = [
             new CarLine(2,2,this.baseSpeed+1,2,'Car_sprite_01',this),
             new CarLine(10,3,this.baseSpeed+1,2,'Car_sprite_01',this),
-            new CarLine(11,4,this.baseSpeed,2,'Car_sprite_01',this),
+            new CarLine(11,1,this.baseSpeed+2,2,'Car_sprite_01',this),
             new CarLine(13,2,this.baseSpeed-1,2,'Car_sprite_01',this),
             new CarLine(14,3,this.baseSpeed-1,2,'Car_sprite_01',this)
             
