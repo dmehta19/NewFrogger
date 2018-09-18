@@ -56,8 +56,8 @@ export class level1 extends Phaser.Scene{
             this.load.image('log_middle', '/assets/Environment/Log_Middle.png');
 
             // characters
-            this.load.image('Car_sprite_01','/assets/Imgs/Cars/Car_sprite_01.png');
-            this.load.image('bullet','/assets/Imgs/Cars/Car_sprite_01.png');
+            this.load.image('Car_sprite_01','/assets/Imgs/Cars/Tank-0001.png');
+            this.load.image('bullet','/assets/Imgs/Bullet/Bullet_Single.png');
 
             //audio
             this.load.audio('InLevelBGM','/assets/Sounds/Level BGM2-Weapons.mp3');
@@ -109,11 +109,11 @@ export class level1 extends Phaser.Scene{
 
 
         this.carLines = [
-            new CarLine(2,2,this.baseSpeed+1,1,'Car_sprite_01',this),
-            new CarLine(10,3,this.baseSpeed+1,1,'Car_sprite_01',this),
-            new CarLine(11,4,this.baseSpeed,1,'Car_sprite_01',this),
-            new CarLine(13,2,this.baseSpeed-1,1,'Car_sprite_01',this),
-            new CarLine(14,3,this.baseSpeed-1,1,'Car_sprite_01',this)
+            new CarLine(2,2,this.baseSpeed+1,2,'Car_sprite_01',this),
+            new CarLine(10,3,this.baseSpeed+1,2,'Car_sprite_01',this),
+            new CarLine(11,4,this.baseSpeed,2,'Car_sprite_01',this),
+            new CarLine(13,2,this.baseSpeed-1,2,'Car_sprite_01',this),
+            new CarLine(14,3,this.baseSpeed-1,2,'Car_sprite_01',this)
             
             
         ];

@@ -39,7 +39,7 @@ export class Frog
     preload()
     {
         // preload the frog assets.
-        this.scene.load.image('frog', '/assets/Character/Frog/Frog_sprite_01.png');
+        this.scene.load.image('frog', '/assets/Character/soilder/solider-0002.png');
 
     } 
 
