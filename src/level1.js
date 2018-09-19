@@ -108,11 +108,6 @@ export class level1 extends Phaser.Scene{
     
         // The player and its settings
 
-        
-
-
-
-
         this.logLines = [
             new LogLines(4,3,this.baseSpeed,[2,5],['log_end','log_middle'],this),
             new LogLines(5,2,this.baseSpeed-1,[2,4],['log_end','log_middle'],this),
@@ -182,7 +177,8 @@ export class level1 extends Phaser.Scene{
             }
             var inY = this.frog.playerInY;
             var inX = this.frog.playerInX;
-            console.log("Player In: " + inY);
+            
+            
             // drawing carlines
             this.carLines.forEach(function(element) {
                 element.drawCar();

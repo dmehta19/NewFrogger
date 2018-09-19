@@ -94,18 +94,20 @@ export class CarLine{
         
         if(!this.isCoolDowning){
             // shoot bullet
-
+            var temp;
             this.sprites.forEach(element => {
-                if(element.x-32 < i_inX && element.x + 32){
-
+                if(element.x-32 < i_inX*32 && element.x + 32){
+                    temp = element;
                 }
             });
 
-
+            if(temp!=null){
            // var temp = this.sprites[];
-            this.pool.GenerateNextBullet(temp.x, temp.y,false);
-            this.isCoolDowning = true;
-            this.dropTime = this.currentTime + i_interval;
+           this.pool.GenerateNextBullet(temp.x, temp.y,false);
+           this.isCoolDowning = true;
+           this.dropTime = this.currentTime + i_interval;
+            }
+
         }
         
         if(this.isCoolDowning){
