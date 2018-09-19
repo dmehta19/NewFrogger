@@ -86,51 +86,9 @@ export class level1 extends Phaser.Scene{
     }
 
     create(){
-
-        const level1 = 
-        [
-            [7,7,3,10,14,7,7,7,7,7,7,0,7,7,7],
-            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
-            [4,4,3,10,14,7,7,7,7,7,7,0,7,7,7],
-            [11,11,11,11,14,7,7,7,7,7,7,0,7,7,7],
-            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
-            [7,7,7,10,7,7,7,7,7,7,7,0,7,7,7],
-            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
-            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
-            [7,3,2,10,2,2,14,7,7,3,2,0,2,2,7],
-            [7,3,2,10,2,2,14,7,7,3,2,0,2,2,7],
-            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
-            [7,7,7,10,7,7,7,7,7,7,7,0,7,7,7],
-            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
-            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
-            [4,4,4,4,4,4,4,4,4,4,4,0,4,4,4],
-            [7,7,7,10,7,7,7,7,7,7,7,0,7,7,7],
-            [2,2,2,10,2,2,2,2,2,2,2,0,2,2,2],
-            [13,13,13,10,13,13,13,13,13,13,13,13,13,13,13],
-            [7,7,3,10,14,7,7,7,7,7,7,0,7,7,7],
-            [4,4,3,10,14,4,4,4,4,4,4,0,4,4,4],
-            [2,2,3,10,14,2,2,2,2,2,2,0,2,2,2],
-        ];
-    
-        const map = this.make.tilemap({
-            data: level1,
-            tileWidth: 32, 
-            tileHeight: 32 
-        });
-        const tiles = map.addTilesetImage('frogger_tiles');
-        const layer = map.createStaticLayer(0, tiles, 0, 0);
-
         this.Goal= this.physics.add.sprite(32*7 +16 ,0+16,'Goal');
-    
-        // The player and its settings
-
-        this.logLines = [
-            //new LogLines(4,3,this.baseSpeed,[2,5],['log_end','log_middle'],this),
-           // new LogLines(5,2,this.baseSpeed-1,[2,4],['log_end','log_middle'],this),
-           // new LogLines(7,2,this.baseSpeed+1,[3,5],['log_end','log_middle'],this),
-           // new LogLines(8,4,this.baseSpeed,[2,2],['log_end','log_middle'],this)
-        ];
-       
+            //Load Timer event
+            this.loadTimer();
             //Load TileMap and player and moving objects
             this.loadTileMap();
 
@@ -140,8 +98,7 @@ export class level1 extends Phaser.Scene{
             this.Collectibles.create(32 * 14 +16, 32 * 8 + 16,'Collectible');
             this.Collectibles.create(32 * 14 +16, 32 * 2 + 16,'Collectible');
        
-            //Load Timer event
-            this.loadTimer();
+
 
             //Load collision events
             this.loadCollisionHandlers();
@@ -149,31 +106,8 @@ export class level1 extends Phaser.Scene{
             //Load sound objects
             this.loadSoundHandlers();
 
-
-        this.frog.create(level1);
         let thisScene = this;
         // bullet pull
-        this.carLines = [
-            new CarLine(2,2,this.baseSpeed+1,2,'Tank_0001',this,this.timer, true),
-            new CarLine(5,3,this.baseSpeed+1,1,'Car_0001',this,this.timer, false),
-            new CarLine(7,1,this.baseSpeed+2,2,'Tank_0001',this,this.timer, true),
-            new CarLine(8,2,this.baseSpeed-1,1,'Car_0001',this,this.timer, false),
-            new CarLine(11,3,this.baseSpeed-1,2,'Tank_0001',this,this.timer, true),
-            new CarLine(13,2,this.baseSpeed,1,'Car_0001',this,this.timer, false),
-            new CarLine(14,3,this.baseSpeed-1,2,'Tank_0001',this,this.timer, true),
-            new CarLine(18,1,this.baseSpeed+1,2,'Tank_0001',this,this.timer, true)
-        ];
-        this.pool = new BulletPool(30,this.frog,this, this.timer);
-        this.pool.bullets.forEach(function(element) {
-           thisScene.bullets.push(element.sprite);
-          });
-
-          this.carLines.forEach(element => {
-            element.pool = this.pool;
-        });
-
-        //this.pool.GenerateNextBullet(240,16,false);
-        
 
         // //  Input Events
         // this.cursors = this.input.keyboard.createCursorKeys();
@@ -206,7 +140,7 @@ export class level1 extends Phaser.Scene{
             var inX = this.frog.playerInX;
             
             
-            this.pool.GenerateBulletFromTop(15000);
+           // this.pool.GenerateBulletFromTop(15000);
 
 
            
@@ -268,42 +202,20 @@ export class level1 extends Phaser.Scene{
         }
     }
     restartGame(){
-                
         this.scene.restart();
-        
     }
    
     printWinScreen(){
        
-        
-            this.ScreenText = this.add.text(220,230,'You won',this);
-            this.time.addEvent({delay : 4000 , callback: this.restartGame, callbackScope: this });
-        
-        
+        this.ScreenText = this.add.text(220,230,'You won',this);
+        this.time.addEvent({delay : 4000 , callback: this.restartGame, callbackScope: this });    
         this.paused = true;
     }
     printLoseScreen(){
         this.ScreenText = this.add.text(210,230,'You Lose',this);
         this.time.addEvent({delay : 4000 , callback: this.restartGame, callbackScope: this });
         this.paused = true;
-            
-
-
-         /*   // checke log collisison with fog
-            frog.isOnLog = false;
-            this.logLines.forEach(function(logs) {
-                logs.colliders.forEach(log => {
-                    if(Collision.ACollideB(frog.collider,log)){
-                        frog.isOnLog = true;
-                    }
-                }); 
-            });
-            */
-  
-       
     }
-    
-   
     playPlayerKilledMusic(){
 
         //only play for the first time this is called
@@ -358,21 +270,27 @@ export class level1 extends Phaser.Scene{
     loadTileMap(){
         const level1 = 
         [
-            [10,10,10,10,10,10,10,10,10,10,10,10,10,10,10],
-            [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
-            [9,9,9,9,9,9,9,9,9,9,9,9,9,9,9],
-            [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-            [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-            [9,9,9,9,9,9,9,9,9,9,9,9,9,9,9],
-            [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-            [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-            [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-            [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
-            [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
-            [8,8,8,8,8,8,8,8,8,8,8,8,8,8,8],
-            [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
-            [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
-            [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
+            [7,7,3,10,14,7,7,7,7,7,7,0,7,7,7],
+            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
+            [4,4,3,10,14,7,7,7,7,7,7,0,7,7,7],
+            [11,11,11,11,14,7,7,7,7,7,7,0,7,7,7],
+            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
+            [7,7,7,10,7,7,7,7,7,7,7,0,7,7,7],
+            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
+            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
+            [7,3,2,10,2,2,14,7,7,3,2,0,2,2,7],
+            [7,3,2,10,2,2,14,7,7,3,2,0,2,2,7],
+            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
+            [7,7,7,10,7,7,7,7,7,7,7,0,7,7,7],
+            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
+            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
+            [4,4,4,4,4,4,4,4,4,4,4,0,4,4,4],
+            [7,7,7,10,7,7,7,7,7,7,7,0,7,7,7],
+            [2,2,2,10,2,2,2,2,2,2,2,0,2,2,2],
+            [13,13,13,10,13,13,13,13,13,13,13,13,13,13,13],
+            [7,7,3,10,14,7,7,7,7,7,7,0,7,7,7],
+            [4,4,3,10,14,4,4,4,4,4,4,0,4,4,4],
+            [2,2,3,10,14,2,2,2,2,2,2,0,2,2,2],
         ];
     
         const map = this.make.tilemap({
@@ -390,11 +308,6 @@ export class level1 extends Phaser.Scene{
 
          //load moving objects (cars and logs and player)
          this.loadMovingObjects(level1);
-
-         
-        
-    
-        
     }
 
     loadSoundHandlers(){
@@ -417,12 +330,9 @@ export class level1 extends Phaser.Scene{
          this.timer = this.time.addEvent({delay : 100000 , callback: this.printLoseScreen, callbackScope: this });
 
          
-        let thisScene = this;
+
         // bullet pull
-        this.pool = new BulletPool(30,this.frog,this, this.timer);
-        this.pool.bullets.forEach(function(element) {
-           thisScene.bullets.push(element.sprite);
-          });
+
     }
 
     loadMovingObjects(level1){
@@ -431,37 +341,46 @@ export class level1 extends Phaser.Scene{
 
        //moving cars
        this.carLines = [
-           new CarLine(2,2,this.baseSpeed+1,2,'Car_sprite_01',this),
-           new CarLine(10,3,this.baseSpeed+1,2,'Car_sprite_01',this),
-           new CarLine(11,1,this.baseSpeed+2,2,'Car_sprite_01',this),
-           new CarLine(13,2,this.baseSpeed-1,2,'Car_sprite_01',this),
-           new CarLine(14,3,this.baseSpeed-1,2,'Car_sprite_01',this)
-           
-           
-       ];
+        new CarLine(2,2,this.baseSpeed+1,2,'Tank_0001',this,this.timer, true),
+        new CarLine(5,3,this.baseSpeed+1,1,'Car_0001',this,this.timer, false),
+        new CarLine(7,1,this.baseSpeed+2,2,'Tank_0001',this,this.timer, true),
+        new CarLine(8,2,this.baseSpeed-1,1,'Car_0001',this,this.timer, false),
+        new CarLine(11,3,this.baseSpeed-1,2,'Tank_0001',this,this.timer, true),
+        new CarLine(13,2,this.baseSpeed,1,'Car_0001',this,this.timer, false),
+        new CarLine(14,3,this.baseSpeed-1,2,'Tank_0001',this,this.timer, true),
+        new CarLine(18,1,this.baseSpeed+1,2,'Tank_0001',this,this.timer, true)
+    ];
 
        //Moving logs
        this.logLines = [
-           new LogLines(4,3,this.baseSpeed,[2,5],['log_end','log_middle'],this),
-           new LogLines(5,2,this.baseSpeed-1,[2,4],['log_end','log_middle'],this),
-           new LogLines(7,2,this.baseSpeed+1,[3,5],['log_end','log_middle'],this),
-           new LogLines(8,4,this.baseSpeed,[2,2],['log_end','log_middle'],this)
+           //new LogLines(4,3,this.baseSpeed,[2,5],['log_end','log_middle'],this),
+         //  new LogLines(5,2,this.baseSpeed-1,[2,4],['log_end','log_middle'],this),
+         //  new LogLines(7,2,this.baseSpeed+1,[3,5],['log_end','log_middle'],this),
+         //  new LogLines(8,4,this.baseSpeed,[2,2],['log_end','log_middle'],this)
        ];
 
       
        // The player and its settings
+       let thisScene = this;
        this.frog.create(level1);
+       this.pool = new BulletPool(30,this.frog,this, this.timer);
+       this.pool.bullets.forEach(function(element) {
+          thisScene.bullets.push(element.sprite);
+         });
+
+         let thePool = this.pool;   
+         this.carLines.forEach(element => {
+            element.pool = thePool;
+        }); 
+
 
    }
 
     loadCollisionHandlers(){
         //Colliding with obstacles
         this.physics.add.overlap(this.obstacles,this.frog.sprites,this.hitObstacle,null,this);
-
         //Overlapping with the goal
         this.physics.add.overlap(this.frog.sprites,this.Goal,this.OnReachingGoal,null,this);
-
-        
         this.physics.add.overlap(this.frog.sprites, this.Collectibles,this.collectCollectibles, null, this);
         //Collision with bullets
         // this.bullets.forEach(function(element) {
@@ -494,18 +413,15 @@ export class level1 extends Phaser.Scene{
     }
     getRandomInt(max) {
         return Math.floor(Math.random() * Math.floor(max));
-      }
+    }
 
-      hitObstacle(){
-
-        
+    hitObstacle(){    
        // returning to previous position because of collision
         this.frog.returnToPrevPosition();
     }
 
     hitBullet()
     {
-        
         this.frog.die();
         this.paused = true;
         this.playPlayerKilledMusic();

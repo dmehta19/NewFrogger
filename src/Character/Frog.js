@@ -8,7 +8,7 @@ export class Frog
 {
     constructor (_scene){
        // super({key:"Frog"});
-        this.PositionX = 128;  // Start PositionX
+        this.PositionX = 240;  // Start PositionX
         this.PositionY = 464 + 192-32;  // Start PositionY
         this.scene = _scene;   // Level scene from LEVEL class
         this.MoveDis = 32;     // Each Step moving Distance
@@ -172,7 +172,7 @@ export class Frog
 
     updateArea(){
         this.playerInX = Math.floor(15*this.sprites.x/480);
-        this.playerInY = Math.floor(15*this.sprites.y/480);
+        this.playerInY = Math.floor(15*this.sprites.y/672);
 
         this.inArea = [
             this.area[this.playerInY][this.playerInX]
