@@ -53,7 +53,7 @@ export class level1 extends Phaser.Scene{
         this.load.image('Goal','/assets/Environment/Goal_Tile_Old.png');
         try {
             // environments
-            this.load.image('frogger_tiles', '/assets/Environment/Frogger_TileMap.png');
+            this.load.image('frogger_tiles', '/assets/Environment/WWO_TileMap.png');
             this.load.image('log_end', '/assets/Environment/Log_End_Left.png');
             this.load.image('log_middle', '/assets/Environment/Log_Middle.png');
 
@@ -79,21 +79,27 @@ export class level1 extends Phaser.Scene{
 
         const level1 = 
         [
-            [10,10,10,10,10,10,10,10,10,10,10,10,10,10,10],
-            [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
-            [9,9,9,9,9,9,9,9,9,9,9,9,9,9,9],
-            [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-            [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-            [9,9,9,9,9,9,9,9,9,9,9,9,9,9,9],
-            [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-            [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-            [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-            [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
-            [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
-            [8,8,8,8,8,8,8,8,8,8,8,8,8,8,8],
-            [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
-            [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
-            [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
+            [7,7,3,10,14,7,7,7,7,7,7,0,7,7,7],
+            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
+            [4,4,3,10,14,7,7,7,7,7,7,0,7,7,7],
+            [11,11,11,11,14,7,7,7,7,7,7,0,7,7,7],
+            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
+            [7,7,7,10,7,7,7,7,7,7,7,0,7,7,7],
+            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
+            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
+            [7,3,2,10,2,2,14,7,7,3,2,0,2,2,7],
+            [7,3,2,10,2,2,14,7,7,3,2,0,2,2,7],
+            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
+            [7,7,7,10,7,7,7,7,7,7,7,0,7,7,7],
+            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
+            [13,13,13,13,13,13,13,13,13,13,13,13,13,13,13],
+            [4,4,4,4,4,4,4,4,4,4,4,0,4,4,4],
+            [7,7,7,10,7,7,7,7,7,7,7,0,7,7,7],
+            [2,2,2,10,2,2,2,2,2,2,2,0,2,2,2],
+            [13,13,13,10,13,13,13,13,13,13,13,13,13,13,13],
+            [7,7,3,10,14,7,7,7,7,7,7,0,7,7,7],
+            [4,4,3,10,14,4,4,4,4,4,4,0,4,4,4],
+            [2,2,3,10,14,2,2,2,2,2,2,0,2,2,2],
         ];
     
         const map = this.make.tilemap({
@@ -109,10 +115,10 @@ export class level1 extends Phaser.Scene{
         // The player and its settings
 
         this.logLines = [
-            new LogLines(4,3,this.baseSpeed,[2,5],['log_end','log_middle'],this),
-            new LogLines(5,2,this.baseSpeed-1,[2,4],['log_end','log_middle'],this),
-            new LogLines(7,2,this.baseSpeed+1,[3,5],['log_end','log_middle'],this),
-            new LogLines(8,4,this.baseSpeed,[2,2],['log_end','log_middle'],this)
+            //new LogLines(4,3,this.baseSpeed,[2,5],['log_end','log_middle'],this),
+           // new LogLines(5,2,this.baseSpeed-1,[2,4],['log_end','log_middle'],this),
+           // new LogLines(7,2,this.baseSpeed+1,[3,5],['log_end','log_middle'],this),
+           // new LogLines(8,4,this.baseSpeed,[2,2],['log_end','log_middle'],this)
         ];
 
         //creating Timer objects
@@ -129,10 +135,13 @@ export class level1 extends Phaser.Scene{
         // bullet pull
         this.carLines = [
             new CarLine(2,2,this.baseSpeed+1,2,'Tank_0001',this,this.timer, true),
-            new CarLine(10,3,this.baseSpeed+1,1,'Car_0001',this,this.timer, false),
-            new CarLine(11,1,this.baseSpeed+2,2,'Tank_0001',this,this.timer, true),
-            new CarLine(13,2,this.baseSpeed-1,1,'Car_0001',this,this.timer, false),
-            new CarLine(14,3,this.baseSpeed-1,2,'Tank_0001',this,this.timer, true)
+            new CarLine(5,3,this.baseSpeed+1,1,'Car_0001',this,this.timer, false),
+            new CarLine(7,1,this.baseSpeed+2,2,'Tank_0001',this,this.timer, true),
+            new CarLine(8,2,this.baseSpeed-1,1,'Car_0001',this,this.timer, false),
+            new CarLine(11,3,this.baseSpeed-1,2,'Tank_0001',this,this.timer, true),
+            new CarLine(13,2,this.baseSpeed,1,'Car_0001',this,this.timer, false),
+            new CarLine(14,3,this.baseSpeed-1,2,'Tank_0001',this,this.timer, true),
+            new CarLine(18,1,this.baseSpeed+1,2,'Tank_0001',this,this.timer, true)
         ];
         this.pool = new BulletPool(30,this.frog,this, this.timer);
         this.pool.bullets.forEach(function(element) {
@@ -222,7 +231,7 @@ export class level1 extends Phaser.Scene{
             }
 
             // if in water(tile id = 3), die
-            if(this.frog.inArea[0] == 3 && !this.frog.onlog && this.frog.isMoveDone){
+            if(false){//this.frog.inArea[0] == 3 && !this.frog.onlog && this.frog.isMoveDone){
                 this.frog.die();
                 this.paused = true;
                 this.playPlayerKilledMusic();
