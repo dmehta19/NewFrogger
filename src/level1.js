@@ -222,7 +222,7 @@ export class level1 extends Phaser.Scene{
         if(!this.playerKilled)
         {
             this.loseMusic.play();
-            
+            //
 
             if(this.bgmMusic.isPlaying)
             {
