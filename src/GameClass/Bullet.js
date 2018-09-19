@@ -46,8 +46,8 @@ export class Bullet{
             this.sprite.x += this.dir[0] * this.speed;
             this.sprite.y += this.dir[1] * this.speed;
 
-        if(this.sprite.x > 480 || this.sprite.x < -32 || 
-            this.sprite.y < -32 || this.sprite.y > 550){
+        if(this.sprite.x > 672 || this.sprite.x < -32 || 
+            this.sprite.y < -32 || this.sprite.y > 672){
                 // go back to pool because of collision with boundary
                 this.GoBackToPool();
                 console.log("Bullet" + this.id +" goes back to pool because of out of boundary");

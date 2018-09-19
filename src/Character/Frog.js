@@ -9,7 +9,7 @@ export class Frog
     constructor (_scene){
        // super({key:"Frog"});
         this.PositionX = 128;  // Start PositionX
-        this.PositionY = 464;  // Start PositionY
+        this.PositionY = 464 + 192-32;  // Start PositionY
         this.scene = _scene;   // Level scene from LEVEL class
         this.MoveDis = 32;     // Each Step moving Distance
         this.MaxSpeed = 2;     // Max speed for moving speed
@@ -45,7 +45,7 @@ export class Frog
     preload()
     {
         // preload the frog assets.
-        this.scene.load.image('frog', '/assets/Character/soilder/solider-0001.png');
+        this.scene.load.image('frog', '/assets/Character/soilder/solider-0003.png');
 
     } 
 
@@ -100,9 +100,9 @@ export class Frog
                 this.sprites.y += this.speedY;
                 //console.log(this.TravelDis);
                 if (this.sprites.x < 16) { this.sprites.x  = 16; this.speedX = 0; this.TravelDis = 0; this.isMoving = false;} // Block the frog move out from the screen. // TODO remove the Magic Numb   // WARNING Magic Number 16
-                else if (this.sprites.x > 464) { this.sprites.x  = 464; this.speedX = 0; this.TravelDis = 0; this.isMoving = false;} 
+                else if (this.sprites.x > 652) { this.sprites.x  = 652; this.speedX = 0; this.TravelDis = 0; this.isMoving = false;} 
                 else if (this.sprites.y < 16) { this.sprites.y  = 16; this.speedY = 0; this.TravelDis = 0; this.isMoving = false;} 
-                else if (this.sprites.y > 464) { this.sprites.y  = 464; this.speedY = 0; this.TravelDis = 0; this.isMoving = false;} 
+                else if (this.sprites.y > 652) { this.sprites.y  = 652; this.speedY = 0; this.TravelDis = 0; this.isMoving = false;} 
             
                 this.collider = new Phaser.Geom.Rectangle(this.sprites.x-this.width/2+16, this.sprites.y-this.height/2+16,this.width, this.height);
                 //console.log(this.collider);

@@ -6,7 +6,7 @@ var config = {
 
     parent: 'NewFrogger',
     width: 480,
-    height: 480,
+    height: 672,
     pixelart: true,
     zoom: 5,
     physics: {

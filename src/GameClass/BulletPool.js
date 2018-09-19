@@ -26,6 +26,9 @@ export class BulletPool{
     GenerateNextBullet(i_x,i_y,b_isTrack){
         this.bullets[this.NextIdToBeUse].InstantiateFromPool(i_x,i_y,b_isTrack);
         this.NextIdToBeUse++;
+        if(this.NextIdToBeUse>=this.bulletAmount){
+            this.NextIdToBeUse = 0;
+        }
     }
 
     GenerateBulletFromTop(i_interval){
