@@ -50,12 +50,12 @@ export class Bullet{
             this.sprite.y < -32 || this.sprite.y > 672){
                 // go back to pool because of collision with boundary
                 this.GoBackToPool();
-                console.log("Bullet" + this.id +" goes back to pool because of out of boundary");
+                //console.log("Bullet" + this.id +" goes back to pool because of out of boundary");
             }
     }
 
     InstantiateFromPool(i_x,i_y,b_isTrack){
-        console.log("Bullet" + this.id +" is instantiated from position (" + i_x + ", " + i_y+")");
+       // console.log("Bullet" + this.id +" is instantiated from position (" + i_x + ", " + i_y+")");
 
         this.x = i_x;
         this.y = i_y;

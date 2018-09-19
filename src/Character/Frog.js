@@ -184,6 +184,7 @@ export class Frog
     returnToPrevPosition(){
         this.sprites.x = this.LastPositionX;
         this.sprites.y = this.LastPositionY;
+      
         this.collider = new Phaser.Geom.Rectangle(this.sprites.x-this.width/2+16, this.sprites.y-this.height/2+16,this.width, this.height);
     }
     

@@ -86,9 +86,9 @@ export class level1 extends Phaser.Scene{
     }
 
     create(){
-        this.Goal= this.physics.add.sprite(32*7 +16 ,0+16,'Goal');
-            //Load Timer event
-            this.loadTimer();
+       
+           
+
             //Load TileMap and player and moving objects
             this.loadTileMap();
 
@@ -105,8 +105,8 @@ export class level1 extends Phaser.Scene{
 
             //Load sound objects
             this.loadSoundHandlers();
-
-        let thisScene = this;
+           
+       
         // bullet pull
 
         // //  Input Events
@@ -129,13 +129,7 @@ export class level1 extends Phaser.Scene{
             // pool to generate bullet from top
         //    this.pool.GenerateBulletFromTop(3000);
 
-            this.frog.update(this.input.keyboard.createCursorKeys());
-            
-        
-            if (Phaser.Geom.Intersects.RectangleToRectangle(this.frog.getBounds(), this.Goal.getBounds())) 
-            {
-                this.time.addEvent({delay : 1000 , callback: this.printWinScreen, callbackScope: this });
-            }
+           
             var inY = this.frog.playerInY;
             var inX = this.frog.playerInX;
             
@@ -165,8 +159,8 @@ export class level1 extends Phaser.Scene{
                   for(var j=0;j<this.carLines[i].amount;j++){
                     if(!this.frog.isDie && Collision.ACollideB(this.frog.collider, this.carLines[i].colliders[j])){
                         //console.log("collide with: " + "line" + i.toString() + " collider: " + j.toString());
-                        console.log(this.carLines[i].colliders[j]);
-                        console.log(this.frog.collider);
+                        // console.log(this.carLines[i].colliders[j]);
+                        // console.log(this.frog.collider);
                         this.frog.die();
                         this.paused = true;
                         this.playPlayerKilledMusic();
@@ -302,6 +296,8 @@ export class level1 extends Phaser.Scene{
         const layer = map.createStaticLayer(0, tiles, 0, 0);
 
         this.Goal= this.physics.add.sprite(32*7 +16 ,0+16,'Goal');
+         //Load Timer event
+         this.loadTimer();
 
          //load static obstacles
          this.loadStaticObstacles(level1);
@@ -378,7 +374,7 @@ export class level1 extends Phaser.Scene{
 
     loadCollisionHandlers(){
         //Colliding with obstacles
-        this.physics.add.overlap(this.obstacles,this.frog.sprites,this.hitObstacle,null,this);
+        this.physics.add.overlap(this.frog.sprites,this.obstacles,this.hitObstacle,null,this);
         //Overlapping with the goal
         this.physics.add.overlap(this.frog.sprites,this.Goal,this.OnReachingGoal,null,this);
         this.physics.add.overlap(this.frog.sprites, this.Collectibles,this.collectCollectibles, null, this);
@@ -395,11 +391,16 @@ export class level1 extends Phaser.Scene{
          //Looking for hazards and obstacles and adding them to the respective array objects
          for(var i= 0;i<15;i++){
              var j=0; var k,l;
-             if(level1[i][j]==9){
+
+             //checking for grass tile -> level1[][]==7
+             if(level1[i][j]==7){
                j= this.getRandomInt(5);
                k= this.getRandomInt(10);
                l = this.getRandomInt(15);
                 if(j!=k  && k!=l && j!=l){
+                    if(i==0 && k==8){
+                        k=9;
+                    }
                     this.obstacles.push(this.physics.add.sprite(32*j + 16,32*i + 16,'Obstacle'));
                     this.obstacles.push(this.physics.add.sprite(32*k + 16,32*i + 16,'Obstacle'));
                     this.obstacles.push(this.physics.add.sprite(32*l + 16,32*i + 16,'Obstacle'));
@@ -417,6 +418,7 @@ export class level1 extends Phaser.Scene{
 
     hitObstacle(){    
        // returning to previous position because of collision
+     
         this.frog.returnToPrevPosition();
     }
 

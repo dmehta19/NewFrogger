@@ -37,7 +37,7 @@ export class CarLine{
         this.dropTime = 0;
         this.isCoolDowning = false;
 
-        console.log(this.game);
+        //console.log(this.game);
 
         // init the interval between cars
         for (var i = 0; i<this.amount; i++){

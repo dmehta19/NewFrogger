@@ -12,7 +12,7 @@ export class BulletPool{
         this.dropTime = 0;
         this.isCoolDowning = false;
 
-        console.log(_game);
+        //console.log(_game);
 
         // init pool
         for(var i =0; i<i_bulletAmount;i++){
