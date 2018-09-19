@@ -24,6 +24,10 @@ export class Frog
         this.height = 20;
         this.collider = new Phaser.Geom.Rectangle(this.PositionX-this.width/2+16, this.PositionY-this.height/2+16,this.width, this.height);
 
+        
+        this.LastPositionX;
+        this.LastPositionY;    
+        
         this.alongSpd = 0;
         this.onlog = false;
 
@@ -73,6 +77,9 @@ export class Frog
         // To Check if it's moving.
         if (!this.isDie)
         {
+            this.LastPositionX = this.sprites.x;
+            this.LastPositionY = this.sprites.y;
+
 
             // move along log
             if(this.alongSpd != 0){
@@ -173,6 +180,11 @@ export class Frog
         
         console.log("X: " + this.playerInX + " Y: " + this.playerInY + " in area: " +this.inArea[0]);
 
+    }
+    returnToPrevPosition(){
+        this.sprites.x = this.LastPositionX;
+        this.sprites.y = this.LastPositionY;
+        this.collider = new Phaser.Geom.Rectangle(this.sprites.x-this.width/2+16, this.sprites.y-this.height/2+16,this.width, this.height);
     }
     
 }
