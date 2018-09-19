@@ -87,43 +87,12 @@ export class level1 extends Phaser.Scene{
 
     create(){
 
-        const level1 = 
-        [
-            [10,10,10,10,10,10,10,10,10,10,10,10,10,10,10],
-            [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
-            [9,9,9,9,9,9,9,9,9,9,9,9,9,9,9],
-            [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-            [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-            [9,9,9,9,9,9,9,9,9,9,9,9,9,9,9],
-            [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-            [3,3,3,3,3,3,3,3,3,3,3,3,3,3,3],
-            [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
-            [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
-            [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
-            [8,8,8,8,8,8,8,8,8,8,8,8,8,8,8],
-            [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
-            [6,6,6,6,6,6,6,6,6,6,6,6,6,6,6],
-            [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
-        ];
-    
-        const map = this.make.tilemap({
-            data: level1,
-            tileWidth: 32, 
-            tileHeight: 32 
-        });
-        const tiles = map.addTilesetImage('frogger_tiles');
-        const layer = map.createStaticLayer(0, tiles, 0, 0);
-
-        this.Goal= this.physics.add.sprite(32*7 +16 ,0+16,'Goal');
+        
+        
     
         // The player and its settings
 
-        this.logLines = [
-            new LogLines(4,3,this.baseSpeed,[2,5],['log_end','log_middle'],this),
-            new LogLines(5,2,this.baseSpeed-1,[2,4],['log_end','log_middle'],this),
-            new LogLines(7,2,this.baseSpeed+1,[3,5],['log_end','log_middle'],this),
-            new LogLines(8,4,this.baseSpeed,[2,2],['log_end','log_middle'],this)
-        ];
+       
        
             //Load TileMap and player and moving objects
             this.loadTileMap();
@@ -144,7 +113,7 @@ export class level1 extends Phaser.Scene{
             this.loadSoundHandlers();
 
 
-        this.frog.create(level1);
+       
         let thisScene = this;
         // bullet pull
         this.carLines = [
@@ -408,12 +377,12 @@ export class level1 extends Phaser.Scene{
          this.timer = this.time.addEvent({delay : 100000 , callback: this.printLoseScreen, callbackScope: this });
 
          
-        let thisScene = this;
-        // bullet pull
-        this.pool = new BulletPool(30,this.frog,this, this.timer);
-        this.pool.bullets.forEach(function(element) {
-           thisScene.bullets.push(element.sprite);
-          });
+        // let thisScene = this;
+        // // bullet pull
+        // this.pool = new BulletPool(30,this.frog,this, this.timer);
+        // this.pool.bullets.forEach(function(element) {
+        //    thisScene.bullets.push(element.sprite);
+        //   });
     }
 
     loadMovingObjects(level1){
@@ -421,15 +390,15 @@ export class level1 extends Phaser.Scene{
         
 
        //moving cars
-       this.carLines = [
-           new CarLine(2,2,this.baseSpeed+1,2,'Car_sprite_01',this),
-           new CarLine(10,3,this.baseSpeed+1,2,'Car_sprite_01',this),
-           new CarLine(11,1,this.baseSpeed+2,2,'Car_sprite_01',this),
-           new CarLine(13,2,this.baseSpeed-1,2,'Car_sprite_01',this),
-           new CarLine(14,3,this.baseSpeed-1,2,'Car_sprite_01',this)
+    //    this.carLines = [
+    //        new CarLine(2,2,this.baseSpeed+1,2,'Car_sprite_01',this),
+    //        new CarLine(10,3,this.baseSpeed+1,2,'Car_sprite_01',this),
+    //        new CarLine(11,1,this.baseSpeed+2,2,'Car_sprite_01',this),
+    //        new CarLine(13,2,this.baseSpeed-1,2,'Car_sprite_01',this),
+    //        new CarLine(14,3,this.baseSpeed-1,2,'Car_sprite_01',this)
            
            
-       ];
+    //    ];
 
        //Moving logs
        this.logLines = [
