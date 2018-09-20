@@ -107,7 +107,7 @@ export class CarLine{
             // shoot bullet
             var temp;
             this.sprites.forEach(element => {
-                if(element.x-32 < i_inX*32 && i_inX*32 < element.x + 32){
+                if(element.x-16 < i_inX*32 && i_inX*32 < element.x + 16){
                     temp = element;
                 }
             });

@@ -85,12 +85,8 @@ export class Bullet{
     GoBackToPool(){
         this.sprite.visible = false;
         this.canMove = false;
-<<<<<<< HEAD
-        this.sprite.y =-32;
-
-=======
         this.sprite.y = -32; 
->>>>>>> AnimationBranch
+
     }
 
     
