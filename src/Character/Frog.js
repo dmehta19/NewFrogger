@@ -45,12 +45,24 @@ export class Frog
     preload()
     {
         // preload the frog assets.
-        this.scene.load.image('frog', '/assets/Character/soilder/solider-0003.png');
+       // this.scene.load.image('frog', '/assets/Character/soilder/solider-0003.png');
+
+        this.scene.load.spritesheet('SoilderRun', '/assets/Character/soilder/SoilderRun.png',
+        { frameWidth: 32, frameHeight: 32, endFrame: 3 });
 
     } 
 
     create(map)
     {
+
+        var config = {
+            key: 'Run',
+            frames: this.scene.anims.generateFrameNumbers('SoilderRun', { start: 0, end: 3, first: 1 }),
+            frameRate: 12
+        };
+
+        this.scene.anims.create(config);
+
         this.area = map;
         this.mapHei = this.area.length;
         this.mapWid = this.area[0].length;
@@ -60,7 +72,7 @@ export class Frog
 
         // Render the frog to the screen
         if (!this.isDie)
-        {this.sprites = this.scene.physics.add.sprite(this.PositionX,this.PositionY,'frog');}
+        {this.sprites = this.scene.physics.add.sprite(this.PositionX,this.PositionY,'SoilderRun');}
             this.collider =new Phaser.Geom.Rectangle(this.sprites.x-this.width/2+16, this.sprites.y-this.height/2+16,this.width, this.height);
            
         // Create the control keys dict
@@ -70,6 +82,8 @@ export class Frog
             'LEFT' : Phaser.Input.Keyboard.KeyCodes.LEFT,
             'RIGHT' : Phaser.Input.Keyboard.KeyCodes.RIGHT,
         })
+
+        
         this.updateArea();
     }
     update()
@@ -123,27 +137,27 @@ export class Frog
 
             // Bind the keyboard input to increasing speed.
             if (Phaser.Input.Keyboard.JustDown(this.cursors['LEFT']) && !this.isMoving)
-            {
+            {this.sprites.play('Run');
                 this.speedX = -this.MaxSpeed;
                 this.isMoving = true;
                 this.isMoveDone = false;
             }
             if (Phaser.Input.Keyboard.JustDown(this.cursors['RIGHT'])&& !this.isMoving)
-            {
+            {this.sprites.play('Run');
                 this.speedX = this.MaxSpeed;
                 this.isMoving = true;
                 this.isMoveDone = false;
 
             }
             if (Phaser.Input.Keyboard.JustDown(this.cursors['UP'])&& !this.isMoving)
-            {
+            {this.sprites.play('Run');
                 this.speedY = -this.MaxSpeed;
                 this.isMoving = true;
                 this.isMoveDone = false;
 
             }
             if (Phaser.Input.Keyboard.JustDown(this.cursors['DOWN'])&& !this.isMoving)
-            {
+            {this.sprites.play('Run');
                 this.speedY = this.MaxSpeed;
                 this.isMoving = true;
                 this.isMoveDone = false;
@@ -172,7 +186,7 @@ export class Frog
 
     updateArea(){
         this.playerInX = Math.floor(15*this.sprites.x/480);
-        this.playerInY = Math.floor(15*this.sprites.y/672);
+        this.playerInY = Math.floor(21*this.sprites.y/672);
 
         this.inArea = [
             this.area[this.playerInY][this.playerInX]
