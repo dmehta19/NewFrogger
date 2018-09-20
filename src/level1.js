@@ -140,8 +140,8 @@ export class level1 extends Phaser.Scene{
             // drawing carlines
             this.carLines.forEach(function(element) {
                 element.drawCar();
-                // if(element.canShoot && inY != element.row-2 && inY!= element.row)
-                //     element.generateBullet(2000, inX);
+                 if(element.canShoot && inY != element.row-2 && inY!= element.row)
+                     element.generateBullet(2000, inX);
               });
 
               // draw logs
