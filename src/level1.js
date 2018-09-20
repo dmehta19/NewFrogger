@@ -9,6 +9,7 @@ export class level1 extends Phaser.Scene{
     constructor (){
         super({key:"level1"});
         this.frog;
+        this.gameStartScene;
         //Timer variables
         this.TimerText ;
         this.timer;
@@ -23,6 +24,7 @@ export class level1 extends Phaser.Scene{
         this.Collectibles;
         this.collected;
         this.goalObstacle;
+        this.isGameStarted = false;
 
          //Load all obstacles into this array
          this.obstacles=[];
@@ -56,6 +58,7 @@ export class level1 extends Phaser.Scene{
         this.loss = false;
 
         //set to false at the start of the level
+        this.isGameStarted = false;
         this.goalOpen = false;
         this.playerKilled = false;
         this.reachedGoal = false;
@@ -67,7 +70,12 @@ export class level1 extends Phaser.Scene{
             this.load.image('log_end', '/assets/Environment/Log_End_Left.png');
             this.load.image('log_middle', '/assets/Environment/Log_Middle.png');
             this.load.image('Obstacle','/assets/Environment/Barb_Wire_Front-export.png');
-            this.load.image('Collectible','/assets/Environment/Barb_Wire_Side.png')
+            this.load.image('Collectible','/assets/Character/soilder/Collectible.png')
+            this.load.image('Tent','/assets/Environment/Tent.png')
+
+            //scenes
+            this.load.image('GameStart','/assets/Scenes/GameStart.png')
+
 
             // characters
             this.load.image('Tank_0001','/assets/Imgs/Cars/Tank-0001.png');
@@ -75,7 +83,7 @@ export class level1 extends Phaser.Scene{
             this.load.spritesheet('tankSheet', '/assets/Imgs/Cars/Tank-0002.png',
             { frameWidth: 64, frameHeight: 32, endFrame: 1 });
            
-            this.load.image('Car_0001','/assets/Imgs/Cars/Car_sprite_01.png');
+            this.load.image('Car_0001','/assets/Imgs/Cars/Jeep_Sprite.png');
             this.load.image('bullet','/assets/Imgs/Bullet/Bullet_Single.png');
 
             //audio
@@ -113,16 +121,33 @@ export class level1 extends Phaser.Scene{
             //Load Animation
             this.loadAnimation();
 
-       
+            this.LoadGameStart();
+
+            this.input.keyboard.on('keydown_SPACE',this.onSPaceDown, this);
         // bullet pull
 
         // //  Input Events
         // this.cursors = this.input.keyboard.createCursorKeys();
     }
 
+    LoadGameStart(){
+        this.gameStartScene = this.add.sprite(240,336,'GameStart');
+    }
+    onSPaceDown(){
+        console.log("pressed space");
+        if(!this.isGameStarted){
+          this.isGameStarted = true;
+          this.gameStartScene.visible = false; 
+        }
+    }
+
     update()
     {
-        
+       // if (Phaser.Input.Keyboard.JustDown( Phaser.Input.Keyboard.KeyCodes.))
+       //     {
+//
+      //      } 
+        if(this.isGameStarted){
         
         if(!this.paused)
         {
@@ -130,6 +155,7 @@ export class level1 extends Phaser.Scene{
             this.pool.bullets.forEach(element => {
                 if(element.canMove){
                     element.UpdatePosition();
+                   
                 }
             });
             // pool to generate bullet from top
@@ -148,10 +174,8 @@ export class level1 extends Phaser.Scene{
             // drawing carlines
             this.carLines.forEach(function(element) {
                 element.drawCar();
-                 if(element.canShoot && inY != element.row-2 && inY!= element.row)
-                     element.generateBullet(2000, inX);
-                if(element.canShoot && inY != element.row-2 && inY!= element.row)
-                    element.generateBullet(3500, inX);
+                if(element.canShoot && inY!= element.row-2 && inY!= element.row && inY!= element.row-3 && inY!= element.row+1)
+                element.generateBullet(3500, inX);
               });
 
               // draw logs
@@ -200,7 +224,8 @@ export class level1 extends Phaser.Scene{
 
         }
         if(!this.endTimer)
-            this.TimerText.text = "Time : " + Math.floor(100-(this.timer.getElapsed()/1000));
+            this.TimerText.text = "Time : " + Math.floor(150-(this.timer.getElapsed()/1000));
+    }
     }
     restartGame(){
         this.scene.restart();
@@ -312,7 +337,7 @@ export class level1 extends Phaser.Scene{
         const tiles = map.addTilesetImage('frogger_tiles');
         const layer = map.createStaticLayer(0, tiles, 0, 0);
 
-        this.Goal= this.physics.add.sprite(32*6 +16 ,32*20 +16,'Goal');
+        this.Goal= this.physics.add.sprite(32*6 +16 ,32*20 +16,'Tent');
         this.goalObstacle = this.physics.add.sprite(32*6 +16 ,32*20 +16,'Obstacle');
          //Load Timer event
          this.loadTimer();
@@ -341,7 +366,7 @@ export class level1 extends Phaser.Scene{
          this.TimerText = this.add.text(0,0,'Time : 100',this);
          this.TimerValue = 100;
          //timer event set for 100 secs
-         this.timer = this.time.addEvent({delay : 100000 , callback: this.printLoseScreen, callbackScope: this });
+         this.timer = this.time.addEvent({delay : 150000 , callback: this.printLoseScreen, callbackScope: this });
 
          
 
@@ -356,11 +381,11 @@ export class level1 extends Phaser.Scene{
        //moving cars
        this.carLines = [
         new CarLine(2,2,this.baseSpeed+1,2,'TankRoll',this,this.timer, true),
-        new CarLine(5,3,this.baseSpeed+1,1,'Car_0001',this,this.timer, false),
+        new CarLine(5,2,this.baseSpeed+1,2,'Car_0001',this,this.timer, false),
         new CarLine(7,1,this.baseSpeed+2,2,'TankRoll',this,this.timer, true),
-        new CarLine(8,2,this.baseSpeed-1,1,'Car_0001',this,this.timer, false),
+        new CarLine(8,2,this.baseSpeed-1,2,'Car_0001',this,this.timer, false),
         new CarLine(11,3,this.baseSpeed-1,2,'TankRoll',this,this.timer, true),
-        new CarLine(13,2,this.baseSpeed,1,'Car_0001',this,this.timer, false),
+        new CarLine(13,2,this.baseSpeed,2,'Car_0001',this,this.timer, false),
         new CarLine(14,3,this.baseSpeed-1,2,'TankRoll',this,this.timer, true),
         new CarLine(18,1,this.baseSpeed+1,2,'TankRoll',this,this.timer, true)
     ];
@@ -391,9 +416,19 @@ export class level1 extends Phaser.Scene{
    }
 
     loadCollisionHandlers(){
+
+        this.physics.add.overlap(this.frog.sprites,this.bullets,this.hitBullet,null,this);
         //Colliding with obstacles
         this.physics.add.overlap(this.frog.sprites,this.obstacles,this.hitObstacle,null,this);
         this.physics.add.overlap(this.frog.sprites,this.goalObstacle,this.hitObstacle,null,this);
+        let thisScene = this; 
+        this.pool.bullets.forEach(element => {
+            thisScene.physics.add.overlap(element.sprite,thisScene.obstacles,thisScene.smashBullet,null,thisScene);
+            thisScene.physics.add.overlap(element.sprite,thisScene.goalObstacle,thisScene.smashBullet,null,thisScene);
+        });
+       
+           
+      
         //Overlapping with the goal
         this.physics.add.overlap(this.frog.sprites,this.Goal,this.OnReachingGoal,null,this);
         this.physics.add.overlap(this.frog.sprites, this.Collectibles,this.collectCollectibles, null, this);
@@ -404,7 +439,7 @@ export class level1 extends Phaser.Scene{
         //    });
 
         // }
-        this.physics.add.overlap(this.frog.sprites,this.bullets,this.hitBullet,null,this);
+      
     }
 
     loadStaticObstacles(level1){
@@ -456,6 +491,7 @@ export class level1 extends Phaser.Scene{
     collectCollectibles(frogger_tiles,Collectible){
         this.collected++;
         Collectible.disableBody(true,true);
+        
         if(this.collected == 4){
             this.goalOpen = true;
             this.goalObstacle.disableBody(true,true);
@@ -470,18 +506,18 @@ export class level1 extends Phaser.Scene{
     this.Collectibles = this.physics.add.group();
     var row0,row5,row8,row15;
    
-    row0 = this.randomIntFromInterval(5,15);
-    if(row0 == 11)
-        row0 = 13;
-    row5 =  this.randomIntFromInterval(0,15);  
-    if(row5 == 3 || row5== 11)
-        row5 = 2;
-    row15  =  this.randomIntFromInterval(0,15);  
-    if(row15 == 3 || row15== 11)
-        row15 = 2;   
+    row0 = this.randomIntFromInterval(5,14);
+    // if(row0 == 11)
+    //     row0 = 13;
+    row5 =  this.randomIntFromInterval(0,14);  
+    // if(row5 == 3 || row5== 11)
+    //     // row5 = 2;
+    row15  =  this.randomIntFromInterval(0,14);  
+    // if(row15 == 3 || row15== 11)
+    //     row15 = 2;   
     row8 = this.randomIntFromInterval(0,2) ;
-    if(row8 == 2)
-        row8 = 14;
+    // if(row8 == 2)
+    //     row8 = 14;
 
     this.Collectibles.create(32*row0 +16, 16,'Collectible');
     this.Collectibles.create(32 * row5 +16, 32 * 5 + 16,'Collectible');
@@ -493,4 +529,12 @@ export class level1 extends Phaser.Scene{
     {
         return Math.floor(Math.random()*(max-min+1)+min);
     }
+
+    smashBullet(bullet,obstacle){
+        //console.log(i_id);
+        console.log("smashed bulklet");
+        bullet.disableBody(true,true); 
+
+    }
+
 }

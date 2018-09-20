@@ -114,7 +114,7 @@ export class Frog
                 this.sprites.y += this.speedY;
                 //console.log(this.TravelDis);
                 if (this.sprites.x < 16) { this.sprites.x  = 16; this.speedX = 0; this.TravelDis = 0; this.isMoving = false;} // Block the frog move out from the screen. // TODO remove the Magic Numb   // WARNING Magic Number 16
-                else if (this.sprites.x > 652) { this.sprites.x  = 652; this.speedX = 0; this.TravelDis = 0; this.isMoving = false;} 
+                else if (this.sprites.x > 464) { this.sprites.x  = 464; this.speedX = 0; this.TravelDis = 0; this.isMoving = false;} 
                 else if (this.sprites.y < 16) { this.sprites.y  = 16; this.speedY = 0; this.TravelDis = 0; this.isMoving = false;} 
                 else if (this.sprites.y > 652) { this.sprites.y  = 652; this.speedY = 0; this.TravelDis = 0; this.isMoving = false;} 
             

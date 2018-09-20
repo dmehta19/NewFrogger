@@ -42,9 +42,11 @@ export class Bullet{
     }
 
     UpdatePosition(){
-        if(this.canMove)
+        if(this.canMove){
             this.sprite.x += this.dir[0] * this.speed;
             this.sprite.y += this.dir[1] * this.speed;
+        }
+
 
         if(this.sprite.x > 672 || this.sprite.x < -32 || 
             this.sprite.y < -32 || this.sprite.y > 672){
@@ -78,16 +80,19 @@ export class Bullet{
         }
 
         this.normalizeDir();
+        this.sprite.enableBody(true,this.x,this.y,true,true);
         this.sprite.visible = true;
         this.canMove = true;
     }
 
     GoBackToPool(){
-        this.sprite.visible = false;
+     this.sprite.visible = false;
         this.canMove = false;
         this.sprite.y = -32; 
 
     }
+    
+
 
     
 }

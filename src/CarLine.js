@@ -56,7 +56,7 @@ export class CarLine{
         }
         // flip horizontally if the moving direction is negative
         for(var i = 0; i<this.amount; i++){
-            if(this.dir == -1){
+            if(this.dir == 1){
                 this.sprites[i].flipX = true;
             }
         }
