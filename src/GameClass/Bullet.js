@@ -85,6 +85,7 @@ export class Bullet{
     GoBackToPool(){
         this.sprite.visible = false;
         this.canMove = false;
+        this.sprite.y =-32;
 
     }
 

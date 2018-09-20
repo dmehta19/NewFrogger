@@ -22,6 +22,7 @@ export class level1 extends Phaser.Scene{
 
         this.Collectibles;
         this.collected;
+        this.goalObstacle;
 
          //Load all obstacles into this array
          this.obstacles=[];
@@ -55,6 +56,7 @@ export class level1 extends Phaser.Scene{
         this.loss = false;
 
         //set to false at the start of the level
+        this.goalOpen = false;
         this.playerKilled = false;
         this.reachedGoal = false;
 
@@ -93,10 +95,7 @@ export class level1 extends Phaser.Scene{
             this.loadTileMap();
 
             //Collectibles
-            this.Collectibles = this.physics.add.group();
-            this.Collectibles.create(16, 32 * 11 + 16,'Collectible');
-            this.Collectibles.create(32 * 14 +16, 32 * 8 + 16,'Collectible');
-            this.Collectibles.create(32 * 14 +16, 32 * 2 + 16,'Collectible');
+           this.loadCollectibles();
        
 
 
@@ -115,8 +114,7 @@ export class level1 extends Phaser.Scene{
 
     update()
     {
-        if(!this.endTimer)
-            this.TimerText.text = "Time : " + Math.floor(100-(this.timer.getElapsed()/1000));
+        
         
         if(!this.paused)
         {
@@ -142,8 +140,8 @@ export class level1 extends Phaser.Scene{
             // drawing carlines
             this.carLines.forEach(function(element) {
                 element.drawCar();
-                if(element.canShoot && inY != element.row-2 && inY!= element.row)
-                    element.generateBullet(2000, inX);
+                // if(element.canShoot && inY != element.row-2 && inY!= element.row)
+                //     element.generateBullet(2000, inX);
               });
 
               // draw logs
@@ -194,6 +192,8 @@ export class level1 extends Phaser.Scene{
             }
 
         }
+        if(!this.endTimer)
+            this.TimerText.text = "Time : " + Math.floor(100-(this.timer.getElapsed()/1000));
     }
     restartGame(){
         this.scene.restart();
@@ -251,7 +251,7 @@ export class level1 extends Phaser.Scene{
     OnReachingGoal(){
         
 
-        if(this.collected ==3){
+        if(this.goalOpen){
          //playing win music
          if(!this.reachedGoal){
          this.playPlayerWonMusic();
@@ -295,7 +295,8 @@ export class level1 extends Phaser.Scene{
         const tiles = map.addTilesetImage('frogger_tiles');
         const layer = map.createStaticLayer(0, tiles, 0, 0);
 
-        this.Goal= this.physics.add.sprite(32*7 +16 ,0+16,'Goal');
+        this.Goal= this.physics.add.sprite(32*6 +16 ,32*20 +16,'Goal');
+        this.goalObstacle = this.physics.add.sprite(32*6 +16 ,32*20 +16,'Obstacle');
          //Load Timer event
          this.loadTimer();
 
@@ -375,9 +376,11 @@ export class level1 extends Phaser.Scene{
     loadCollisionHandlers(){
         //Colliding with obstacles
         this.physics.add.overlap(this.frog.sprites,this.obstacles,this.hitObstacle,null,this);
+        this.physics.add.overlap(this.frog.sprites,this.goalObstacle,this.hitObstacle,null,this);
         //Overlapping with the goal
         this.physics.add.overlap(this.frog.sprites,this.Goal,this.OnReachingGoal,null,this);
         this.physics.add.overlap(this.frog.sprites, this.Collectibles,this.collectCollectibles, null, this);
+        this.physics.add.overlap(this.obstacles,this.Collectibles,this.smashObstacle,null,this);
         //Collision with bullets
         // this.bullets.forEach(function(element) {
         //     thisScene.bullets.push(element.sprite);
@@ -389,18 +392,16 @@ export class level1 extends Phaser.Scene{
 
     loadStaticObstacles(level1){
          //Looking for hazards and obstacles and adding them to the respective array objects
-         for(var i= 0;i<15;i++){
+         for(var i= 1;i<18;i++){
              var j=0; var k,l;
 
-             //checking for grass tile -> level1[][]==7
-             if(level1[i][j]==7){
+             //checking for halfgrass tile -> level1[][]==4 or road -- tile id = 13
+             if(level1[i][j]==4|| i== 3||i==9 ||i==16){
                j= this.getRandomInt(5);
                k= this.getRandomInt(10);
                l = this.getRandomInt(15);
                 if(j!=k  && k!=l && j!=l){
-                    if(i==0 && k==8){
-                        k=9;
-                    }
+                   
                     this.obstacles.push(this.physics.add.sprite(32*j + 16,32*i + 16,'Obstacle'));
                     this.obstacles.push(this.physics.add.sprite(32*k + 16,32*i + 16,'Obstacle'));
                     this.obstacles.push(this.physics.add.sprite(32*l + 16,32*i + 16,'Obstacle'));
@@ -409,6 +410,12 @@ export class level1 extends Phaser.Scene{
 
              }
             
+        }
+        for(var j=0;j<15;j++){
+            if(j!=6){
+                this.obstacles.push(this.physics.add.sprite(32*j + 16,32*20 + 16,'Obstacle'));
+            }
+
         }
 
     }
@@ -432,7 +439,41 @@ export class level1 extends Phaser.Scene{
     collectCollectibles(frogger_tiles,Collectible){
         this.collected++;
         Collectible.disableBody(true,true);
+        if(this.collected == 4){
+            this.goalOpen = true;
+            this.goalObstacle.disableBody(true,true);
+        }
 
     }
+    smashObstacle(obstacle,Collectible){
+        obstacle.disableBody(true,true);
+    }
 
+    loadCollectibles(){
+    this.Collectibles = this.physics.add.group();
+    var row0,row5,row8,row15;
+   
+    row0 = this.randomIntFromInterval(5,15);
+    if(row0 == 11)
+        row0 = 13;
+    row5 =  this.randomIntFromInterval(0,15);  
+    if(row5 == 3 || row5== 11)
+        row5 = 2;
+    row15  =  this.randomIntFromInterval(0,15);  
+    if(row15 == 3 || row15== 11)
+        row15 = 2;   
+    row8 = this.randomIntFromInterval(0,2) ;
+    if(row8 == 2)
+        row8 = 14;
+
+    this.Collectibles.create(32*row0 +16, 16,'Collectible');
+    this.Collectibles.create(32 * row5 +16, 32 * 5 + 16,'Collectible');
+    this.Collectibles.create(32 * row8 +16, 32 * 8 + 16,'Collectible');
+    this.Collectibles.create(32 * row15 +16, 32 * 15 + 16,'Collectible');
+    }
+   
+    randomIntFromInterval(min,max)
+    {
+        return Math.floor(Math.random()*(max-min+1)+min);
+    }
 }
