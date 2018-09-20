@@ -66,14 +66,25 @@ export class CarLine{
         {
             this.colliders.push(new Phaser.Geom.Rectangle(this.positions[i]+16,this.row*32-32+16,this.width,this.height));
         }
-
+        
+        this.isPlayed = false;
 
     }
 
     drawCar(){
+        if(!this.isPlayed ){
+            console.log("Play!");
+            this.isPlayed = true;
+            for(var i = 0; i<this.amount;i++){
+                if(this.name=="TankRoll")
+                this.sprites[i].anims.play('TankRoll');
+            }
+        }
         // update position
         for(var i = 0; i<this.amount;i++){
+
             this.sprites[i].x += this.dir*this.speed;
+           
             if(this.sprites[i].x > this.boundary[1] && this.dir>0){
                 this.sprites[i].x = this.boundary[0];
             }
@@ -96,16 +107,17 @@ export class CarLine{
             // shoot bullet
             var temp;
             this.sprites.forEach(element => {
-                if(element.x-32 < i_inX*32 && element.x + 32){
+                if(element.x-32 < i_inX*32 && i_inX*32 < element.x + 32){
                     temp = element;
                 }
             });
 
             if(temp!=null){
            // var temp = this.sprites[];
-           this.pool.GenerateNextBullet(temp.x, temp.y,false);
-           this.isCoolDowning = true;
-           this.dropTime = this.currentTime + i_interval;
+                this.pool.GenerateNextBullet(temp.x, temp.y,false);
+                this.isCoolDowning = true;
+                this.dropTime = this.currentTime + i_interval;
+                temp = null;
             }
 
         }

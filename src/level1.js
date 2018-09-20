@@ -69,6 +69,10 @@ export class level1 extends Phaser.Scene{
 
             // characters
             this.load.image('Tank_0001','/assets/Imgs/Cars/Tank-0001.png');
+           
+            this.load.spritesheet('tankSheet', '/assets/Imgs/Cars/Tank-0002.png',
+            { frameWidth: 64, frameHeight: 32, endFrame: 1 });
+           
             this.load.image('Car_0001','/assets/Imgs/Cars/Car_sprite_01.png');
             this.load.image('bullet','/assets/Imgs/Bullet/Bullet_Single.png');
 
@@ -77,6 +81,7 @@ export class level1 extends Phaser.Scene{
             this.load.audio('PlayerKilled','/assets/Sounds/Male Death Cry.wav');
             this.load.audio('ReachedGoal','/assets/Sounds/Level Complete.wav')
 
+       
 
         } catch (error) {
             alert(error.message);
@@ -106,6 +111,9 @@ export class level1 extends Phaser.Scene{
             //Load sound objects
             this.loadSoundHandlers();
            
+            //Load Animation
+            this.loadAnimation();
+
        
         // bullet pull
 
@@ -143,7 +151,7 @@ export class level1 extends Phaser.Scene{
             this.carLines.forEach(function(element) {
                 element.drawCar();
                 if(element.canShoot && inY != element.row-2 && inY!= element.row)
-                    element.generateBullet(2000, inX);
+                    element.generateBullet(3500, inX);
               });
 
               // draw logs
@@ -158,9 +166,6 @@ export class level1 extends Phaser.Scene{
               for(var i=0;i<this.carLines.length;i++){
                   for(var j=0;j<this.carLines[i].amount;j++){
                     if(!this.frog.isDie && Collision.ACollideB(this.frog.collider, this.carLines[i].colliders[j])){
-                        //console.log("collide with: " + "line" + i.toString() + " collider: " + j.toString());
-                        // console.log(this.carLines[i].colliders[j]);
-                        // console.log(this.frog.collider);
                         this.frog.die();
                         this.paused = true;
                         this.playPlayerKilledMusic();
@@ -261,6 +266,16 @@ export class level1 extends Phaser.Scene{
     }
     }
 
+    loadAnimation(){
+        var config = {
+            key: 'TankRoll',
+            frames: this.anims.generateFrameNumbers('tankSheet', { start: 0, end: 1, first: 0 }),
+            frameRate: 12,
+            repeat: -1
+        };
+        this.anims.create(config);
+    }
+
     loadTileMap(){
         const level1 = 
         [
@@ -337,14 +352,14 @@ export class level1 extends Phaser.Scene{
 
        //moving cars
        this.carLines = [
-        new CarLine(2,2,this.baseSpeed+1,2,'Tank_0001',this,this.timer, true),
+        new CarLine(2,2,this.baseSpeed+1,2,'TankRoll',this,this.timer, true),
         new CarLine(5,3,this.baseSpeed+1,1,'Car_0001',this,this.timer, false),
-        new CarLine(7,1,this.baseSpeed+2,2,'Tank_0001',this,this.timer, true),
+        new CarLine(7,1,this.baseSpeed+2,2,'TankRoll',this,this.timer, true),
         new CarLine(8,2,this.baseSpeed-1,1,'Car_0001',this,this.timer, false),
-        new CarLine(11,3,this.baseSpeed-1,2,'Tank_0001',this,this.timer, true),
+        new CarLine(11,3,this.baseSpeed-1,2,'TankRoll',this,this.timer, true),
         new CarLine(13,2,this.baseSpeed,1,'Car_0001',this,this.timer, false),
-        new CarLine(14,3,this.baseSpeed-1,2,'Tank_0001',this,this.timer, true),
-        new CarLine(18,1,this.baseSpeed+1,2,'Tank_0001',this,this.timer, true)
+        new CarLine(14,3,this.baseSpeed-1,2,'TankRoll',this,this.timer, true),
+        new CarLine(18,1,this.baseSpeed+1,2,'TankRoll',this,this.timer, true)
     ];
 
        //Moving logs

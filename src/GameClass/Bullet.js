@@ -55,7 +55,7 @@ export class Bullet{
     }
 
     InstantiateFromPool(i_x,i_y,b_isTrack){
-       // console.log("Bullet" + this.id +" is instantiated from position (" + i_x + ", " + i_y+")");
+        console.log("Bullet" + this.id +" is instantiated from position (" + i_x + ", " + i_y+")");
 
         this.x = i_x;
         this.y = i_y;
@@ -85,7 +85,7 @@ export class Bullet{
     GoBackToPool(){
         this.sprite.visible = false;
         this.canMove = false;
-
+        this.sprite.y = -32; 
     }
 
     
